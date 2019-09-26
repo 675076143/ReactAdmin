@@ -55,7 +55,7 @@ class Login extends Component{
                             })(
                                 <Input
                                     prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                    placeholder="Username"
+                                    placeholder="用户名"
                                 />,
                             )}
                         </Form.Item>
@@ -78,7 +78,7 @@ class Login extends Component{
                                 <Input
                                     prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                     type="password"
-                                    placeholder="Password"
+                                    placeholder="密码"
                                 />,
                             )}
                         </Form.Item>
@@ -86,14 +86,14 @@ class Login extends Component{
                             {getFieldDecorator('remember', {
                                 valuePropName: 'checked',
                                 initialValue: true,
-                            })(<Checkbox>Remember me</Checkbox>)}
+                            })(<Checkbox>记住账号</Checkbox>)}
                             <a className="login-form-forgot" href="">
-                                Forgot password
+                                忘记密码
                             </a>
                             <Button type="primary" htmlType="submit" className="login-form-button">
-                                Log in
+                                登录
                             </Button>
-                            Or <a href="">register now!</a>
+                            Or <a href="/register">注册</a>
                         </Form.Item>
                     </Form>
                 </section>

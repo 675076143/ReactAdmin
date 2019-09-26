@@ -1,11 +1,11 @@
-.login{
+.register{
     width: 100%;
     height: 100%;
     background-image: url('./images/background.jpg');
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
-.login-header{
+.register-header{
     display: flex;
     align-items: center;
     color: white;
@@ -22,21 +22,20 @@ img:hover{
     box-shadow: 0px 0px 25px rgba(15, 255, 0, 0.5);
     transition: all 0.2s;
 }
-.login-header h1{
+.register-header h1{
     font-size: 30px;
     color: white;
 }
-.login-content{
-    width: 400px;
-    height: 320px;
+.register-content{
+    width: 600px;
+    height: 550px;
     background-color: white;
-    margin: 100px auto;
+    margin: 20px auto;
     padding: 20px;
-    box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
 }
 h2{
     text-align: center;
 }
-.login-form-button{
+.register-form-button{
     width: 100%;
 }
