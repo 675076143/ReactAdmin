@@ -181,7 +181,7 @@ class Register extends Component{
                         <Form.Item
                             label={
                                 <span>
-              Nickname&nbsp;
+              昵称&nbsp;
                                     <Tooltip title="您希望别人如何称呼您？">
                 <Icon type="question-circle-o" />
               </Tooltip>

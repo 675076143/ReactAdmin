@@ -8,6 +8,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.min.css'
+import 'nprogress/nprogress.css'
 
 //将APP组件标签渲染到index页面的div上
 ReactDOM.render(<App />, document.getElementById('root'));

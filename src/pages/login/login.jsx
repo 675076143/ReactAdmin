@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import './login.css'
 import logo from './images/logo.jpg'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import {reqLogin} from "../../api";
 
 
 /*
@@ -16,9 +17,14 @@ class Login extends Component{
         //取得form对象
         const form  = this.props.form;
         //表单验证
-        form.validateFields((err, values) => {
+        form.validateFields(async (err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                //发送ajax请求
+                const {username, password} = values
+                const response = await reqLogin(username,password)
+                console.log('请求成功',response.data)
+
             }else {
 
             }
