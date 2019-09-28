@@ -4,7 +4,8 @@
 
 ## 命令
 启动：`$ npm run start`
-##使用技术
+
+## 使用技术
 1. 单页面应用(SPA)
 2. 路由(react-dom-route)
 3. Ant Desgin
