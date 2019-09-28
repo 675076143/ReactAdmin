@@ -2,6 +2,8 @@
 * 在axios的基础上
 * 封装ajax
 * 函数的返回值是promise对象
+* 优化： 不返回response,直接返回response.data
+*       resolve(response) => resolve(response.data)
 * 使用NProgress在发送请求时显示进度条
 * */
 import axios from 'axios'
@@ -25,13 +27,13 @@ export default function ajax (url, data={}, method="GET") {
         }
         //2. 如果成功了，调用resolve
         promise.then(response=>{
-            resolve(promise)
+            resolve(response.data)
             NProgress.done();
         })
         //3. 如果失败了，调用reject
         promise.catch(error=>{
             //这里不调用reject，只需提示错误即可
-            //reject(promise)
+            //reject(error)
             //使用antd的message
             NProgress.done();
             message.error('请求错误： '+error.message)

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import './login.css'
 import logo from './images/logo.jpg'
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import {reqLogin} from "../../api";
 
 
@@ -22,8 +22,17 @@ class Login extends Component{
                 console.log('Received values of form: ', values);
                 //发送ajax请求
                 const {username, password} = values
-                const response = await reqLogin(username,password)
-                console.log('请求成功',response.data)
+                const result = await reqLogin(username,password)
+                //console.log('请求成功',response.data)
+                if(result.code == "200"){//登陆成功
+                    message.success(result.msg)
+                    //跳转到后台管理页面
+                    //由于不需要回退到登录界面，所以用replace
+                    //如果需要则应用push
+                    this.props.history.replace('/')
+                }else {//登录失败
+                    message.error(result.msg)
+                }
 
             }else {
 
