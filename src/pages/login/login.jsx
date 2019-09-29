@@ -3,13 +3,17 @@ import './login.css'
 import logo from './images/logo.jpg'
 import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import {reqLogin} from "../../api";
-
+import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
+import {Redirect} from "react-router-dom";
 
 /*
 * 登录的路由组件
 * */
 
 class Login extends Component{
+
+
 
     handleSubmit = e => {
         //阻止事件的默认行为(发送请求)
@@ -26,10 +30,14 @@ class Login extends Component{
                 //console.log('请求成功',response.data)
                 if(result.code == "200"){//登陆成功
                     message.success(result.msg)
+                    //内存中保存User
+                    memoryUtils.user = username;
+                    //localstorage中保存User
+                    storageUtils.setUser(username)
                     //跳转到后台管理页面
                     //由于不需要回退到登录界面，所以用replace
                     //如果需要则应用push
-                    this.props.history.replace('/')
+                    this.props.history.replace('/admin')
                 }else {//登录失败
                     message.error(result.msg)
                 }
@@ -41,6 +49,14 @@ class Login extends Component{
     };
 
     render() {
+        const user = memoryUtils.user
+        //如果内存中有User
+        //返回admin界面
+        if (JSON.stringify(user)!='{}'){
+            return <Redirect to={'/admin'}/>
+        }
+
+
         const { getFieldDecorator } = this.props.form;
         return(
             <div className='login'>
