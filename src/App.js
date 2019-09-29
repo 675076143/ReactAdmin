@@ -7,6 +7,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom"
 import Login from './pages/login/login'
 import Admin from "./pages/admin/admin";
 import Register from "./pages/register/register";
+
 /*
 * 应用的根组件
 * */

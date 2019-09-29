@@ -3,6 +3,8 @@ import memoryUtils from "../../utils/memoryUtils"
 import {message} from "antd";
 import {Redirect} from "react-router-dom";
 import { Layout } from 'antd';
+import LeftNav from "../../components/left-nav/left-nav";
+import MyHeader from "../../components/my-header/my-header";
 const { Header, Footer, Sider, Content } = Layout;
 /*
 * 登录的路由组件
@@ -18,11 +20,13 @@ export default class Admin extends Component{
         }
         return(
             <Layout style={{height:'100%'}}>
-                <Sider>Sider</Sider>
+                <Sider>
+                    <LeftNav/>
+                </Sider>
                 <Layout>
-                    <Header>Header</Header>
-                    <Content>Content</Content>
-                    <Footer>Footer</Footer>
+                    <MyHeader/>
+                    <Content style={{backgroundColor:'white'}}>Content</Content>
+                    <Footer style={{textAlign:'center',color:'gray'}}>建议使用Chrome浏览器</Footer>
                 </Layout>
             </Layout>
         )
