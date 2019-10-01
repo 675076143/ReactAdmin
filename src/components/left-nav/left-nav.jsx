@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import './left-nav.css'
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import logo from "../../assets/img/logo.jpg"
 import { Menu, Icon } from 'antd';
 import menuConfig from "../../config/menuConfig";
@@ -9,7 +9,9 @@ const { SubMenu } = Menu;
 /*
 * 左侧导航条组件
 * */
-export default class LeftNav extends Component{
+
+
+export class LeftNav extends Component{
 
     /*
     * 使用map动态生成菜单
@@ -45,8 +47,8 @@ export default class LeftNav extends Component{
     }
 
     render() {
-
-
+        const selectedKey = this.props.location.pathname
+        console.log(selectedKey)
         return(
             <div className='left-nav'>
                 <Link to='/admin' className='left-nav-header'>
@@ -55,8 +57,7 @@ export default class LeftNav extends Component{
                 </Link>
 
                 <Menu
-                    defaultSelectedKeys={['/admin/home']}
-                    defaultOpenKeys={['sub1']}
+                    selectedKeys={[selectedKey]}
                     mode="inline"
                     theme="dark"
                 >
@@ -64,8 +65,18 @@ export default class LeftNav extends Component{
                         this.generateMenuByMenuConfig(menuConfig)
                     }
                 </Menu>
-
             </div>
         )
     }
 }
+
+/*
+* withRouter高阶组件
+* 包装新非路由组件
+* 返回一个新的组件
+* 新的组件向非路由组件传递三个参数
+*   1.history
+*   2.location
+*   3.match
+* */
+export default withRouter(LeftNav)
