@@ -7,6 +7,11 @@ import {BrowserRouter, Route, Switch} from "react-router-dom"
 import Login from './pages/login/login'
 import Admin from "./pages/admin/admin";
 import Register from "./pages/register/register";
+import Home from "./pages/home/home";
+import User from "./pages/user/user";
+import Line from "./pages/chars/line";
+import Bar from "./pages/chars/bar";
+import Pie from "./pages/chars/pie";
 
 /*
 * 应用的根组件

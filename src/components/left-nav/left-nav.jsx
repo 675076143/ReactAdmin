@@ -3,13 +3,50 @@ import './left-nav.css'
 import {Link} from "react-router-dom";
 import logo from "../../assets/img/logo.jpg"
 import { Menu, Icon } from 'antd';
+import menuConfig from "../../config/menuConfig";
 
 const { SubMenu } = Menu;
 /*
 * 左侧导航条组件
 * */
 export default class LeftNav extends Component{
+
+    /*
+    * 使用map动态生成菜单
+    * */
+    generateMenuByMenuConfig = (menuConfig)=>{
+        return menuConfig.map(item=>{
+            if(!item.children) {
+                return(
+                    <Menu.Item key={item.key}>
+                        <Link to={item.key}>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                        </Link>
+                    </Menu.Item>
+                )
+            }else {
+                return(
+                    <SubMenu
+                        key={item.key}
+                        title={
+                            <span>
+                                <Icon type={item.icon} />
+                                <span>{item.title}</span>
+                            </span>
+                        }
+                    >
+                        {/*递归调用自身*/}
+                        {this.generateMenuByMenuConfig(item.children)}
+                    </SubMenu>
+                )
+            }
+        })
+    }
+
     render() {
+
+
         return(
             <div className='left-nav'>
                 <Link to='/admin' className='left-nav-header'>
@@ -18,53 +55,14 @@ export default class LeftNav extends Component{
                 </Link>
 
                 <Menu
-                    defaultSelectedKeys={['1']}
+                    defaultSelectedKeys={['/admin/home']}
                     defaultOpenKeys={['sub1']}
                     mode="inline"
                     theme="dark"
                 >
-                    <Menu.Item key="1">
-                        <Icon type="pie-chart" />
-                        <span>Option 1</span>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Icon type="desktop" />
-                        <span>Option 2</span>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Icon type="inbox" />
-                        <span>Option 3</span>
-                    </Menu.Item>
-                    <SubMenu
-                        key="sub1"
-                        title={
-                            <span>
-                <Icon type="mail" />
-                <span>Navigation One</span>
-              </span>
-                        }
-                    >
-                        <Menu.Item key="5">Option 5</Menu.Item>
-                        <Menu.Item key="6">Option 6</Menu.Item>
-                        <Menu.Item key="7">Option 7</Menu.Item>
-                        <Menu.Item key="8">Option 8</Menu.Item>
-                    </SubMenu>
-                    <SubMenu
-                        key="sub2"
-                        title={
-                            <span>
-                <Icon type="appstore" />
-                <span>Navigation Two</span>
-              </span>
-                        }
-                    >
-                        <Menu.Item key="9">Option 9</Menu.Item>
-                        <Menu.Item key="10">Option 10</Menu.Item>
-                        <SubMenu key="sub3" title="Submenu">
-                            <Menu.Item key="11">Option 11</Menu.Item>
-                            <Menu.Item key="12">Option 12</Menu.Item>
-                        </SubMenu>
-                    </SubMenu>
+                    {
+                        this.generateMenuByMenuConfig(menuConfig)
+                    }
                 </Menu>
 
             </div>

@@ -4,8 +4,8 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
+import './app.css'
 import * as serviceWorker from './serviceWorker';
 import 'antd/dist/antd.min.css'
 import 'nprogress/nprogress.css'
