@@ -13,8 +13,6 @@ import {Redirect} from "react-router-dom";
 
 class Login extends Component{
 
-
-
     handleSubmit = e => {
         //阻止事件的默认行为(发送请求)
         e.preventDefault();

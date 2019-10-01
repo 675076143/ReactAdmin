@@ -1,3 +1,42 @@
 .my-header{
     height: 80px;
+    background-color: #fff;
+}
+.my-header-top{
+    height: 35px;
+    text-align: right;
+}
+.my-header-top a{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.my-header-bottom{
+    display: flex;
+}
+.my-header-bottom-left{
+    width: 25%;
+}
+.my-header-bottom-left h1{
+    margin-left: 60px;
+    position: relative;
+    text-align: center;
+    width: 80px;
+}
+.my-header-bottom-left h1::after{
+    content: "";
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid white;
+    border-bottom: 20px solid transparent;
+    position: absolute;
+    right: 50%;
+    top: 100%;
+    transform: translateX(50%);
+}
+.my-header-bottom-right{
+    width: 75%;
+    text-align: right;
+}
+.my-header-bottom-right span{
+    margin-right: 10px;
 }
