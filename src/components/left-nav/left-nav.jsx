@@ -28,6 +28,13 @@ export class LeftNav extends Component{
                     </Menu.Item>
                 )
             }else {
+                //自动展开被访问的SubMenu
+                //获取到与路径相同的item.key
+                const selectedKey = this.props.location.pathname
+                const selectedItem = item.children.find(item => item.key===selectedKey)
+                if(selectedItem){
+                    this.openKeys = item.key
+                }
                 return(
                     <SubMenu
                         key={item.key}
@@ -46,8 +53,18 @@ export class LeftNav extends Component{
         })
     }
 
+    /*
+    * 生命周期：
+    * 将要装载，在render之前调用
+    * 装配菜单数据
+    * */
+    componentWillMount() {
+        this.menu = this.generateMenuByMenuConfig(menuConfig)
+    }
+
     render() {
         const selectedKey = this.props.location.pathname
+        const openKeys = this.openKeys
         console.log(selectedKey)
         return(
             <div className='left-nav'>
@@ -58,11 +75,12 @@ export class LeftNav extends Component{
 
                 <Menu
                     selectedKeys={[selectedKey]}
+                    defaultOpenKeys={[openKeys]}
                     mode="inline"
                     theme="dark"
                 >
                     {
-                        this.generateMenuByMenuConfig(menuConfig)
+                        this.menu
                     }
                 </Menu>
             </div>
