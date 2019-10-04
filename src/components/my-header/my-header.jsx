@@ -6,6 +6,11 @@ import ajax from "../../api/ajax";
 import {reqWeather} from "../../api";
 import {formateDate} from "../../utils/dateUtils"
 import menuConfig from "../../config/menuConfig";
+import { Modal, Button } from 'antd';
+import storageUtils from "../../utils/storageUtils";
+const { confirm } = Modal;
+
+
 /*
 * 左侧导航条组件
 * */
@@ -17,7 +22,7 @@ export class MyHeader extends Component{
 
     //实时获取当前时间
     getTime = ()=>{
-        setInterval(()=>{
+        this.intervalID = setInterval(()=>{
             const currentTime = formateDate(Date.now())
             this.setState({currentTime})
         },1000)
@@ -47,14 +52,35 @@ export class MyHeader extends Component{
         return title
     }
 
+    //点击退出登录
+    logout = ()=>{
+        confirm({
+            title: '退出登录?',
+            onOk:()=> {
+                //删除保存的数据
+                memoryUtils.user = {}
+                storageUtils.removeUser()
+                //跳转到login
+                this.props.history.replace('/login')
+            },
+        });
+    }
+
 
     /*
     * 第一次render()之后执行一次
     * 一般在此执行异步操作
     * */
     componentDidMount() {
-        // this.getWeather()
-        // this.getTime()
+        this.getWeather()
+        this.getTime()
+    }
+    /*
+    * 当前组件卸载之前使用
+    * */
+    componentWillUnmount() {
+        //清楚定时器
+        clearInterval(this.intervalID)
     }
 
     render() {
@@ -64,7 +90,7 @@ export class MyHeader extends Component{
             <div className='my-header'>
                 <div className='my-header-top'>
                     欢迎，{memoryUtils.user}
-                    <a>退出</a>
+                    <a onClick={this.logout}>退出</a>
                 </div>
                 <hr/>
                 <div className='my-header-bottom'>
@@ -73,7 +99,7 @@ export class MyHeader extends Component{
                     </div>
                     <div className='my-header-bottom-right'>
                         <span>{currentTime}</span>
-                        <span>{}</span>
+                        <span>{this.state.weather}</span>
                     </div>
                 </div>
             </div>
