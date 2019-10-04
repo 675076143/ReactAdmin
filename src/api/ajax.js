@@ -9,8 +9,11 @@
 import axios from 'axios'
 import {message} from "antd";
 import NProgress from 'nprogress'
+import Qs from 'qs'
+
 
 export default function ajax (url, data={}, method="GET") {
+
 
     //返回Promise对象
     //在函数内部处理异常
@@ -23,7 +26,7 @@ export default function ajax (url, data={}, method="GET") {
                 params: data
             })
         }else {//post请求
-            promise = axios.post(url,data)
+            promise = axios.post(url,Qs.stringify(data))
         }
         //2. 如果成功了，调用resolve
         promise.then(response=>{

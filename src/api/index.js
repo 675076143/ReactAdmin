@@ -10,7 +10,10 @@ import ajax from './ajax'
 import jsonp from 'jsonp'
 
 //登录
-export const reqLogin = (userName, password) => ajax('/user/login',{},'POST')
+export const reqLogin = (userName, password) => {
+    console.log({userName,password})
+    return ajax('/user/login',{userName,password},'POST')
+}
 
 //添加用户
 
