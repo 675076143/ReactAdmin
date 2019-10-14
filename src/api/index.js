@@ -24,6 +24,12 @@ export const reqTopCategory = ()=>{
 export const reqSecondaryCategory = (topCategoryID)=>{
     return ajax('/api/secondaryCategory/'+topCategoryID)
 }
+
+//修改商品分类
+//一级分类
+export const reqUpdateTopCategory = (topCategoryID,topCategoryName)=>{
+    return ajax('/api/topCategories/'+topCategoryID,{topCategoryName},"PUT")
+}
 //和风天气jsonp请求
 /*
 export const reqWeather = (location)=> {

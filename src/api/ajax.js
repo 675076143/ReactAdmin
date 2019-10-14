@@ -25,7 +25,11 @@ export default function ajax (url, data={}, method="GET") {
             promise = axios.get(url, {
                 params: data
             })
-        }else {//post请求
+        }else if(method=="PUT"){//put请求
+            console.log("Put data: ",data)
+            promise = axios.put(url, Qs.stringify(data))
+        }
+        else {//post请求
             promise = axios.post(url,Qs.stringify(data))
         }
         //2. 如果成功了，调用resolve

@@ -1,7 +1,9 @@
 import React, {Component} from "react";
 import {Redirect, Route} from "react-router-dom";
-import {Card, Button, Icon, Table, message} from 'antd';
-import {reqLogin, reqTopCategory,reqSecondaryCategory} from "../../api";
+import {Card, Button, Icon, Table, message, Modal} from 'antd';
+import {reqLogin, reqTopCategory,reqSecondaryCategory,reqUpdateTopCategory} from "../../api";
+import UpdateCategoryForm from "./update-category-form";
+import AddCategoryForm from "./add-category-form"
 /*
 * 主页
 * */
@@ -14,6 +16,9 @@ export default class Category extends Component{
         rowKey:'topCategoryID',
         loading:false,
         categories:[], //一级分类列表
+        //模态框的设置
+        //0:不可见; 1:添加可见; 2:修改可见
+        modalVisible:0
     }
     //初始化列
     initColumns = (dataIndex,key)=>{
@@ -25,13 +30,14 @@ export default class Category extends Component{
                 key: 'x',
                 render: (category) => (
                     <span>
-                        <a>修改分类</a>
+                        <a onClick={()=>{this.openUpdateModal(category)}}>修改分类</a>
                         <a style={{margin:"20px"}} onClick={()=>{this.getSecondaryCategories(category.topCategoryID, category.topCategoryName)}}>查看子分类</a>
                     </span>
                 )
             },
         ];
     }
+
     //获取一级列表
     getTopCategories = async () =>{
         //发送请求前显示loading
@@ -54,6 +60,7 @@ export default class Category extends Component{
         this.setState({loading:false})
 
     }
+
     //获取二级列表
     getSecondaryCategories = async (topCategoryID, topCategoryName) =>{
         console.log(topCategoryID,topCategoryName)
@@ -75,6 +82,63 @@ export default class Category extends Component{
 
     }
 
+    //添加分类
+    addCategory = () =>{
+        console.log("添加分类")
+    }
+
+    //修改分类
+    updateCategory = async (category) =>{
+        let categoryID;
+        const categoryName = this.form.getFieldValue("categoryName")
+        //清除输入数据
+        this.form.resetFields()
+        //判断修改的是一级分类还是二级分类
+        if(this.state.categoryLevel = 1){
+            categoryID = category.topCategoryID;
+        }else if(this.state.categoryLevel = 2){
+            categoryID = category.secondaryCategoryID;
+        }
+        console.log("修改分类",categoryID,categoryName)
+
+        const result = await reqUpdateTopCategory(categoryID,categoryName)
+        console.log(result)
+        if(result.code=="200"){
+            //重新获取所有数据
+            this.getTopCategories()
+        }
+        //修改完成后隐藏Modal
+        this.setState({
+            modalVisible:0
+        })
+
+    }
+
+    //显示添加分类Modal
+    openAddModal = () =>{
+        this.setState({
+            modalVisible:1
+        })
+    }
+
+    //显示更新分类Modal
+    openUpdateModal = (category) =>{
+         this.category = category
+        this.setState({
+            modalVisible:2
+        })
+    }
+
+    //关闭Modal
+    handleCancel = () =>{
+        //清除输入数据
+        this.form.resetFields()
+        //更新状态
+        this.setState({
+            modalVisible:0
+        })
+    }
+
     componentWillMount() {
         this.initColumns('topCategoryName','topCategoryID')
     }
@@ -84,8 +148,10 @@ export default class Category extends Component{
     }
 
     render(){
+        //读取当前选中的category
+        const category = this.category || {}
         //读取状态数据
-        const {categoryLevel,parentName,categories,loading,rowKey} = this.state
+        const {categoryLevel,parentName,categories,loading,rowKey,modalVisible} = this.state
         const title = categoryLevel===1?'一级分类列表':(
             <span>
                 <a onClick={this.getTopCategories}>一级分类列表</a>
@@ -94,7 +160,7 @@ export default class Category extends Component{
             </span>
         )
         const extra = (
-            <Button type="primary">
+            <Button type="primary" onClick={this.openAddModal}>
                 <Icon type="plus" />
                 添加
             </Button>
@@ -110,7 +176,28 @@ export default class Category extends Component{
                     columns={this.columns}
                     dataSource={categories}
                 />
+
+                <Modal
+                    title="添加分类"
+                    visible={modalVisible===1}
+                    onOk={this.addCategory}
+                    onCancel={this.handleCancel}
+                >
+                    <AddCategoryForm/>
+                </Modal>
+
+                <Modal
+                    title="修改分类"
+                    visible={modalVisible===2}
+                    onOk={()=>{this.updateCategory(category)}}
+                    onCancel={this.handleCancel}
+                >
+                    {/*setForm: 将组件传递给父组件!!!*/}
+                    <UpdateCategoryForm categoryName={category.topCategoryName||category.secondaryCategoryName}
+                                        setForm={(form)=>{this.form = form}}/>
+                </Modal>
             </Card>
+
         )
     }
 }
