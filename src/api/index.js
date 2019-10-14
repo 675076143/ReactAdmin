@@ -12,11 +12,18 @@ import jsonp from 'jsonp'
 //登录
 export const reqLogin = (userName, password) => {
     console.log({userName,password})
-    return ajax('/user/login',{userName,password},'POST')
+    return ajax('/authentication/login',{userName,password},'POST')
 }
 
-//添加用户
-
+//获取商品分类
+//一级分类
+export const reqTopCategory = ()=>{
+    return ajax('/api/topCategories')
+}
+//二级分类
+export const reqSecondaryCategory = (topCategoryID)=>{
+    return ajax('/api/secondaryCategory/'+topCategoryID)
+}
 //和风天气jsonp请求
 /*
 export const reqWeather = (location)=> {

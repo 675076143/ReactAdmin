@@ -1,12 +1,81 @@
 import React, {Component} from "react";
 import {Redirect, Route} from "react-router-dom";
-import { Card,Button,Icon,Table } from 'antd';
+import {Card, Button, Icon, Table, message} from 'antd';
+import {reqLogin, reqTopCategory,reqSecondaryCategory} from "../../api";
 /*
 * 主页
 * */
 
 export default class Category extends Component{
+
+    state = {
+        rowKey:'topCategoryID',
+        loading:false,
+        categories:[], //一级分类列表
+    }
+    //初始化列
+    initColumns = (dataIndex,key)=>{
+        this.columns = [
+            { title: 'Name', dataIndex: dataIndex, key: key },
+            {
+                title: '操作',
+                dataIndex: '',
+                key: 'x',
+                render: (category) => (
+                    <span>
+                        <a>修改分类</a>
+                        <a style={{margin:"20px"}} onClick={()=>{this.getSecondaryCategories(category.topCategoryID)}}>查看子分类</a>
+                    </span>
+                )
+            },
+        ];
+    }
+    //获取一级列表
+    getTopCategories = async () =>{
+        //发送请求前显示loading
+        this.setState({loading:true})
+        const  result = await reqTopCategory();
+        if(result.code == 200){
+            const categories = result.data;
+            this.setState({
+                categories
+            })
+        }else {
+            message.error('获取分类失败!')
+        }
+        //请求结束隐藏loading
+        this.setState({loading:false})
+
+    }
+    //获取二级列表
+    getSecondaryCategories = async (topCategoryID) =>{
+        console.log(topCategoryID)
+        const result = await reqSecondaryCategory(topCategoryID)
+        if(result.code == 200){
+            //更换列的dataIndex和key
+            this.initColumns('secondaryCategoryName','secondaryCategoryID')
+            const categories = result.data;
+            this.setState({
+                categories,
+                rowKey:'secondaryCategoryID'
+            })
+        }else {
+            message.error('获取分类失败!')
+        }
+
+    }
+
+    componentWillMount() {
+        this.initColumns('topCategoryName','topCategoryID')
+    }
+    //发送异步AJAX请求
+    componentDidMount() {
+        this.getTopCategories()
+    }
+
     render(){
+        //读取状态数据
+        const {categories,loading,rowKey} = this.state
         const title = '一级分类列表'
         const extra = (
             <Button type="primary">
@@ -14,76 +83,16 @@ export default class Category extends Component{
                 添加
             </Button>
         )
-        //表格列名
-        const columns = [
-            { title: 'Name', dataIndex: 'name', key: 'name' },
-            {
-                title: '操作',
-                dataIndex: '',
-                key: 'x',
-                render: () => (
-                    <span>
-                        <a>修改分类</a>
-                        <a style={{margin:"20px"}}>查看子分类</a>
-                    </span>
-                )
-            },
-        ];
-        //表格数据
-        const data = [
-            {
-                key: 1,
-                name: 'John Brown',
-                age: 32,
-                address: 'New York No. 1 Lake Park',
-                description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
-            },
-            {
-                key: 2,
-                name: 'Jim Green',
-                age: 42,
-                address: 'London No. 1 Lake Park',
-                description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.',
-            },
-            {
-                key: 3,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-            },
-            {
-                key: 4,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-            },
-            {
-                key: 5,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-            },
-            {
-                key: 6,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-            },
-
-        ];
-
+        console.log(this.state.data)
         return (
             <Card title={title} extra={extra} style={{height:'100%'}}>
                 <Table
-                    rowKey='key'
+                    loading={loading}
+                    rowKey={rowKey}
                     bordered={true}
                     pagination={{pageSize:6}}
-                    columns={columns}
-                    dataSource={data}
+                    columns={this.columns}
+                    dataSource={categories}
                 />
             </Card>
         )
