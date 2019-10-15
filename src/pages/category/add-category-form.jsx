@@ -6,19 +6,26 @@ import FormItem from "antd/es/form/FormItem";
 * 添加商品分类的Form组件
 * */
 class AddCategoryForm extends Component{
+
+    componentWillMount(){
+        this.props.setForm(this.props.form)
+    }
     render() {
         const {getFieldDecorator} = this.props.form
+        const categories = this.props.categories
+        const parentID = String(this.props.parentID)
         return (
             <Form>
                 <FormItem>
                     {
                         getFieldDecorator(
                             'categoryID',
-                            {initialValue:'0'}
+                            {initialValue: parentID}
                         )
                         (
                             <Select>
-                                <Select.Option value='0'>一级分类</Select.Option>
+                                <Select.Option value='0'>一级分类列表</Select.Option>
+                                {categories.map(item=><Select.Option value={String(item.topCategoryID)}>{item.topCategoryName}</Select.Option>)}
                             </Select>
                         )
                     }

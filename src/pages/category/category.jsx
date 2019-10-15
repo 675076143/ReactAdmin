@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Redirect, Route} from "react-router-dom";
 import {Card, Button, Icon, Table, message, Modal} from 'antd';
-import {reqLogin, reqTopCategory,reqSecondaryCategory,reqUpdateTopCategory} from "../../api";
+import {reqLogin, reqTopCategory,reqSecondaryCategory,reqUpdateTopCategory,reqUpdateSecondaryCategory} from "../../api";
 import UpdateCategoryForm from "./update-category-form";
 import AddCategoryForm from "./add-category-form"
 /*
@@ -13,6 +13,7 @@ export default class Category extends Component{
     state = {
         categoryLevel:1,
         parentName:'',
+        parentID:'0',//父组件ID ID为0时:一级分类列表 ID不为0时:二级分类列表
         rowKey:'topCategoryID',
         loading:false,
         categories:[], //一级分类列表
@@ -31,7 +32,13 @@ export default class Category extends Component{
                 render: (category) => (
                     <span>
                         <a onClick={()=>{this.openUpdateModal(category)}}>修改分类</a>
-                        <a style={{margin:"20px"}} onClick={()=>{this.getSecondaryCategories(category.topCategoryID, category.topCategoryName)}}>查看子分类</a>
+                        {//判断当前是否为一级分类, 如果是,显示"查看子分类"
+                            dataIndex=='topCategoryName'
+                            ?<a style={{margin:"20px"}}
+                                onClick={()=>{
+                                    this.getSecondaryCategories(category.topCategoryID, category.topCategoryName)
+                                }}>查看子分类</a>
+                            :' '}
                     </span>
                 )
             },
@@ -51,8 +58,11 @@ export default class Category extends Component{
             this.setState({
                 categories,
                 rowKey:'topCategoryID',
-                categoryLevel:1
+                categoryLevel:1,
+                parentID:0
             })
+            //为了方便新增分类,将一级分类列表保存起来
+            this.topCategories = categories
         }else {
             message.error('获取分类失败!')
         }
@@ -74,7 +84,8 @@ export default class Category extends Component{
                 categories,
                 rowKey:'secondaryCategoryID',
                 categoryLevel:2,
-                parentName:topCategoryName
+                parentName:topCategoryName,
+                parentID:topCategoryID
             })
         }else {
             message.error('获取分类失败!')
@@ -88,25 +99,33 @@ export default class Category extends Component{
     }
 
     //修改分类
-    updateCategory = async (category) =>{
+    updateCategory = async (category, parentID, parentName) =>{
         let categoryID;
         const categoryName = this.form.getFieldValue("categoryName")
         //清除输入数据
         this.form.resetFields()
         //判断修改的是一级分类还是二级分类
-        if(this.state.categoryLevel = 1){
+        if(this.state.categoryLevel == 1){//一级分类
             categoryID = category.topCategoryID;
-        }else if(this.state.categoryLevel = 2){
+            console.log("修改一级分类",categoryID,categoryName)
+            const result = await reqUpdateTopCategory(categoryID,categoryName)
+            console.log(result)
+            if(result.code=="200"){
+                //重新获取所有数据
+                this.getTopCategories()
+            }
+        }else if(this.state.categoryLevel == 2){//二级分类
             categoryID = category.secondaryCategoryID;
+            console.log("修改二级分类",categoryID,categoryName)
+            const result = await reqUpdateSecondaryCategory(categoryID,categoryName)
+            console.log(result)
+            if(result.code=="200"){
+                //重新获取所有数据
+                this.getSecondaryCategories(parentID,parentName)
+            }
         }
-        console.log("修改分类",categoryID,categoryName)
 
-        const result = await reqUpdateTopCategory(categoryID,categoryName)
-        console.log(result)
-        if(result.code=="200"){
-            //重新获取所有数据
-            this.getTopCategories()
-        }
+
         //修改完成后隐藏Modal
         this.setState({
             modalVisible:0
@@ -148,10 +167,12 @@ export default class Category extends Component{
     }
 
     render(){
+        //读取一级分类列表
+        const topCategories = this.topCategories
         //读取当前选中的category
         const category = this.category || {}
         //读取状态数据
-        const {categoryLevel,parentName,categories,loading,rowKey,modalVisible} = this.state
+        const {categoryLevel,parentName,parentID,categories,loading,rowKey,modalVisible} = this.state
         const title = categoryLevel===1?'一级分类列表':(
             <span>
                 <a onClick={this.getTopCategories}>一级分类列表</a>
@@ -183,13 +204,16 @@ export default class Category extends Component{
                     onOk={this.addCategory}
                     onCancel={this.handleCancel}
                 >
-                    <AddCategoryForm/>
+                    {/*setForm: 将组件传递给父组件!!!*/}
+                    <AddCategoryForm categories={topCategories}
+                                     parentID={parentID}
+                                     setForm={(form)=>{this.form = form}}/>
                 </Modal>
 
                 <Modal
                     title="修改分类"
                     visible={modalVisible===2}
-                    onOk={()=>{this.updateCategory(category)}}
+                    onOk={()=>{this.updateCategory(category,parentID, parentName)}}
                     onCancel={this.handleCancel}
                 >
                     {/*setForm: 将组件传递给父组件!!!*/}
