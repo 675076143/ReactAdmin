@@ -42,6 +42,23 @@ const menuConfig = [
         title:'用户管理'
     },
     {
+        key:'/admin/products',
+        icon:'pie-chart',
+        title:'商品',
+        children:[
+            {
+                key:'/admin/category',
+                icon:'pie-chart',
+                title:'品类管理'
+            },
+            {
+                key:'/admin/product',
+                icon:'pie-chart',
+                title:'商品管理'
+            }
+        ]
+    },
+    {
         key:'/admin/chart',
         icon:'pie-chart',
         title:'图表',

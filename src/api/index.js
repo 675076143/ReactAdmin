@@ -10,9 +10,50 @@ import ajax from './ajax'
 import jsonp from 'jsonp'
 
 //登录
-export const reqLogin = (userName, password) => ajax('/user/login',{},'POST')
+export const reqLogin = (userName, password) => {
+    console.log({userName,password})
+    return ajax('/authentication/login',{userName,password},'POST')
+}
 
-//添加用户
+//获取商品分类
+//一级分类
+export const reqTopCategory = ()=>{
+    return ajax('/api/topCategories')
+}
+//二级分类
+export const reqSecondaryCategory = (topCategoryID)=>{
+    return ajax('/api/secondaryCategory/'+topCategoryID)
+}
+
+//修改商品分类
+//一级分类
+export const reqUpdateTopCategory = (topCategoryID,topCategoryName)=>{
+    return ajax('/api/topCategories/'+topCategoryID,{topCategoryName},"PUT")
+}
+//二级分类
+export const reqUpdateSecondaryCategory = (secondaryCategoryID,secondaryCategoryName)=>{
+    return ajax('/api/secondaryCategory/'+secondaryCategoryID,{secondaryCategoryName},"PUT")
+}
+//添加商品分类
+//一级分类
+export const reqAddTopCategory = (topCategoryName)=>{
+    return ajax('/api/topCategories/'+topCategoryName, null,'POST')
+}
+//二级分类
+export const reqAddSecondaryCategory = (secondaryCategoryName,topCategoryID)=>{
+    return ajax('/api/secondaryCategory/'+secondaryCategoryName,{topCategoryID},'POST')
+}
+
+
+//和风天气
+export const reqWeather = (location) => {
+    const url = `https://free-api.heweather.com/s6/weather`
+    const data = {
+        location:location,
+        key:"ba11e85f276a4c72979682aae37a6dea"
+    }
+    return ajax(url,data)
+}
 
 //和风天气jsonp请求
 /*
@@ -24,15 +65,6 @@ export const reqWeather = (location)=> {
 }
 */
 
-//和风天气
-export const reqWeather = (location) => {
-    const url = `https://free-api.heweather.com/s6/weather`
-    const data = {
-        location:location,
-        key:"ba11e85f276a4c72979682aae37a6dea"
-    }
-    return ajax(url,data)
-}
 
 
 

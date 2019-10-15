@@ -10,6 +10,8 @@ import Line from "../chars/line";
 import Bar from "../chars/bar";
 import Pie from "../chars/pie"
 import User from "../user/user";
+import Category from "../category/category";
+import Product from "../product/product";
 const { Header, Footer, Sider, Content } = Layout;
 /*
 * 后台管理的路由组件
@@ -34,6 +36,8 @@ export default class Admin extends Component{
                         <Switch>
                             <Route path='/admin/home' component={Home}/>
                             <Route path='/admin/user' component={User}/>
+                            <Route path='/admin/category' component={Category}/>
+                            <Route path='/admin/product' component={Product}/>
                             <Route path='/admin/line' component={Line}/>
                             <Route path='/admin/bar' component={Bar}/>
                             <Route path='/admin/pie' component={Pie}/>
