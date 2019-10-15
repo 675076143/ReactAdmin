@@ -34,7 +34,15 @@ export const reqUpdateTopCategory = (topCategoryID,topCategoryName)=>{
 export const reqUpdateSecondaryCategory = (secondaryCategoryID,secondaryCategoryName)=>{
     return ajax('/api/secondaryCategory/'+secondaryCategoryID,{secondaryCategoryName},"PUT")
 }
-
+//添加商品分类
+//一级分类
+export const reqAddTopCategory = (topCategoryName)=>{
+    return ajax('/api/topCategories/'+topCategoryName, null,'POST')
+}
+//二级分类
+export const reqAddSecondaryCategory = (secondaryCategoryName,topCategoryID)=>{
+    return ajax('/api/secondaryCategory/'+secondaryCategoryName,{topCategoryID},'POST')
+}
 
 
 //和风天气

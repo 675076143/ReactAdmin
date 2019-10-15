@@ -34,7 +34,10 @@ class AddCategoryForm extends Component{
                     {
                         getFieldDecorator(
                             'categoryName',
-                            {initialValue: ''}
+                            {
+                                initialValue: '',
+                                rules:[{required:true,message:"请输入分类名称!"}]
+                            }
                         )
                         (
                             <Input placeholder='分类名称'/>

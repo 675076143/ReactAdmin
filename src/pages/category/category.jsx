@@ -1,7 +1,12 @@
 import React, {Component} from "react";
 import {Redirect, Route} from "react-router-dom";
 import {Card, Button, Icon, Table, message, Modal} from 'antd';
-import {reqLogin, reqTopCategory,reqSecondaryCategory,reqUpdateTopCategory,reqUpdateSecondaryCategory} from "../../api";
+import {reqTopCategory,
+        reqSecondaryCategory,
+        reqUpdateTopCategory,
+        reqUpdateSecondaryCategory,
+        reqAddTopCategory,
+        reqAddSecondaryCategory} from "../../api";
 import UpdateCategoryForm from "./update-category-form";
 import AddCategoryForm from "./add-category-form"
 /*
@@ -21,6 +26,7 @@ export default class Category extends Component{
         //0:不可见; 1:添加可见; 2:修改可见
         modalVisible:0
     }
+
     //初始化列
     initColumns = (dataIndex,key)=>{
         this.columns = [
@@ -94,8 +100,33 @@ export default class Category extends Component{
     }
 
     //添加分类
-    addCategory = () =>{
-        console.log("添加分类")
+    addCategory =  (parentID) =>{
+        //表单验证
+        this.form.validateFields(async (err,values)=>{
+            if(!err){
+                const {categoryID,categoryName} = values
+                //categoryID为0时 添加一级分类, 否则添加二级分类
+                if(categoryID==0){
+                    const result = await reqAddTopCategory(categoryName)
+                    if(result.code=="200"){
+                        this.getTopCategories()
+                    }
+                }else{
+                    const result = await reqAddSecondaryCategory(categoryName, parentID)
+                    if(result.code=="200"){
+                        this.getSecondaryCategories(parentID)
+                    }
+                }
+                console.log("添加分类")
+                //修改完成后隐藏Modal
+                this.setState({
+                    modalVisible:0
+                })
+            }
+
+        })
+
+
     }
 
     //修改分类
@@ -201,7 +232,7 @@ export default class Category extends Component{
                 <Modal
                     title="添加分类"
                     visible={modalVisible===1}
-                    onOk={this.addCategory}
+                    onOk={()=>{this.addCategory(parentID)}}
                     onCancel={this.handleCancel}
                 >
                     {/*setForm: 将组件传递给父组件!!!*/}
