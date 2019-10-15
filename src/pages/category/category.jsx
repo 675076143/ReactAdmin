@@ -105,6 +105,8 @@ export default class Category extends Component{
         this.form.validateFields(async (err,values)=>{
             if(!err){
                 const {categoryID,categoryName} = values
+                //清除输入数据
+                this.form.resetFields()
                 //categoryID为0时 添加一级分类, 否则添加二级分类
                 if(categoryID==0){
                     const result = await reqAddTopCategory(categoryName)
