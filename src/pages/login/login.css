@@ -12,13 +12,13 @@
     height: 80px;
     background-color: rgba(0,0,0,0.3);
 }
-img{
+.logo{
     height: 65px;
     width: 65px;
     margin: 0 15px 0 50px;
     border-radius: 50px;
 }
-img:hover{
+.logo:hover{
     box-shadow: 0px 0px 25px rgba(15, 255, 0, 0.5);
     transition: all 0.2s;
 }

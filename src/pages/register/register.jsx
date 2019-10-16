@@ -133,7 +133,7 @@ class Register extends Component{
         return (
             <div className='register'>
                 <header className='register-header'>
-                    <img src={logo} />
+                    <img className='logo' src={logo} />
                     <h1>React后台管理项目</h1>
                 </header>
                 <section className='register-content'>
