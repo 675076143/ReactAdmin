@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
-import {Card,Select,Input,Table,Button,Icon} from "antd";
+import {Card, Select, Input, Table, Button, Icon, message} from "antd";
+import {reqProduct, reqProductByDesc, reqProductByName} from "../../api";
+import {PAGE_SIZE} from "../../utils/constants";
 /*
 * 主页
 * */
@@ -8,32 +10,14 @@ import {Card,Select,Input,Table,Button,Icon} from "antd";
 export default class ProductHome extends Component{
 
     state = {
-        products:[
-            {
-                "productID": 1,
-                "productName": "Alienware15",
-                "productDesc": "采用超高效电压调节技术、Cryo-Tech v3.0 散热技术和全新工业设计的 15\" 游戏笔记本电脑。尽在更为纤薄的 15\" 笔记本电脑",
-                "price": 9999.0,
-                "topCategoryID": 0,
-                "secondaryCategoryID": 13,
-                "detail": null,
-                "status": 0,
-                "image": "Alienware15.png"
-            },
-            {
-                "productID": 2,
-                "productName": "Alienware17",
-                "productDesc": "更为轻薄的Alienware 17\"笔记本电脑。采用镁合金打造，电池续航时间超长，且CPU可实现动态超频。",
-                "price": 144999.0,
-                "topCategoryID": 0,
-                "secondaryCategoryID": 13,
-                "detail": null,
-                "status": 0,
-                "image": "Alienware17.png"
-            }
-        ]
+        loading:false,
+        totalNum:0,//商品总条数
+        products:[],//商品列表
+        keyType:"productName",//搜索类型
+        keyword:""//搜索关键字
     }
 
+    //初始化列
     initColumns =() =>{
         this.columns = [
             {
@@ -62,11 +46,12 @@ export default class ProductHome extends Component{
                 }
             },
             {
+                width:100,
                 title: '操作',
                 render:(product)=>{
                     return (
                         <span>
-                            <a style={{margin:'0 10px'}}>详情</a>
+                            <a style={{margin:'0 5px'}}>详情</a>
                             <a>修改</a>
                         </span>
                     )
@@ -75,21 +60,52 @@ export default class ProductHome extends Component{
         ]
     }
 
+    //获取商品
+    getProducts = async (pageNum) =>{
+        this.setState({loading:true})//显示loading
+        const {keyType,keyword} = this.state
+        let result
+        if(keyword!=''){//判断关键字是否为空
+            if(keyType=="productName"){//判断查询类型
+                result = await reqProductByName(keyword,pageNum,PAGE_SIZE)
+            }else {
+                result = await reqProductByDesc(keyword,pageNum,PAGE_SIZE)
+            }
+
+        }else {
+            result = await reqProduct(pageNum,PAGE_SIZE)
+        }
+
+        console.log(result)
+        if(result.code=="200"){
+            const {totalNum,product} = result.data
+            this.setState({
+                totalNum:totalNum,
+                products:product
+            })
+        }
+        this.setState({loading:false})//隐藏loading
+    }
+
     componentWillMount() {
         this.initColumns()
     }
 
+    componentDidMount() {
+        this.getProducts(1)
+    }
+
     render(){
         //取出数据
-        const {products} = this.state
+        const {loading,totalNum,products,keyType,keyword} = this.state
         const title = (
             <span>
-                <Select value='1'>
-                    <Select.Option value='1'>按名称搜索</Select.Option>
-                    <Select.Option value='2'>按描述搜索</Select.Option>
+                <Select value={keyType} onChange={value => this.setState({keyType: value})}>
+                    <Select.Option value='productName'>按名称搜索</Select.Option>
+                    <Select.Option value='productDesc'>按描述搜索</Select.Option>
                 </Select>
-                <input placeholder='关键字' style={{width:150,margin:'0 15px'}}/>
-                <Button type='primary'>搜索</Button>
+                <input placeholder='关键字' value={keyword} style={{width:150,margin:'0 15px'}} onChange={event => this.setState({keyword: event.target.value})}/>
+                <Button type='primary' onClick={()=>{this.getProducts(1)}}>搜索</Button>
             </span>
         )
         const extra = (
@@ -102,7 +118,18 @@ export default class ProductHome extends Component{
         return (
 
             <Card title={title} extra={extra}>
-                <Table bordered rowKey='productID' dataSource={products} columns={this.columns} />;
+                <Table
+                    loading={loading}
+                    bordered
+                    rowKey='productID'
+                    dataSource={products}
+                    columns={this.columns}
+                    pagination={{
+                        defaultPageSize:PAGE_SIZE,
+                        showQuickJumper:true,
+                        total:totalNum,
+                        onChange:this.getProducts
+                    }} />;
             </Card>
         )
     }

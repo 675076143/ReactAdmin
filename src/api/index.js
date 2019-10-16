@@ -44,6 +44,14 @@ export const reqAddSecondaryCategory = (secondaryCategoryName,topCategoryID)=>{
     return ajax('/api/secondaryCategory/'+secondaryCategoryName,{topCategoryID},'POST')
 }
 
+//商品列表
+//获取商品列表
+export const reqProduct = (pageNum,pageSize)=> ajax('/api/products',{pageNum,pageSize})
+//模糊查询(商品名称)
+export const reqProductByName = (productName, pageNum,pageSize)=> ajax('/api/products/productName',{productName, pageNum,pageSize})
+//模糊查询(商品描述)
+export const reqProductByDesc = (productDesc, pageNum,pageSize)=> ajax('/api/products/productDesc',{productDesc, pageNum,pageSize})
+
 
 //和风天气
 export const reqWeather = (location) => {
