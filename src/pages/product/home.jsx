@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {Card, Select, Input, Table, Button, Icon, message} from "antd";
-import {reqProduct, reqProductByDesc, reqProductByName} from "../../api";
+import {reqProduct, reqProductByDesc, reqProductByName, reqUpdateProductStatus} from "../../api";
 import {PAGE_SIZE} from "../../utils/constants";
 /*
 * 主页
@@ -35,12 +35,16 @@ export default class ProductHome extends Component{
             },
             {
                 title: '状态',
-                dataIndex: 'status',
-                render:(status)=>{
+                //dataIndex: 'status',
+                render:(product)=>{
+                    const{productID,status} = product
+                    const updateStatus = status==0 ? 1: 0
                     return(
                         <span>
-                            <Button type='primary'>下架</Button><br/>
-                            <span>在售</span>
+                            <Button type='primary' onClick={()=>this.updateProductStatus(productID,updateStatus)}>
+                                {status==1?'上架':'下架'}
+                            </Button><br/>
+                            <span>{status==1?'停售':'在售'}</span>
                         </span>
                     )
                 }
@@ -85,6 +89,15 @@ export default class ProductHome extends Component{
             })
         }
         this.setState({loading:false})//隐藏loading
+    }
+
+    //更新商品状态
+    updateProductStatus = async (productID,status)=>{
+        const result = await reqUpdateProductStatus(productID,status)
+        if(result.code == "200"){
+            message.success("更新状态成功!")
+            this.getProducts(1)
+        }
     }
 
     componentWillMount() {

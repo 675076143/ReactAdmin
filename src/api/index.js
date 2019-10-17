@@ -53,6 +53,8 @@ export const reqProduct = (pageNum,pageSize)=> ajax('/api/products',{pageNum,pag
 export const reqProductByName = (productName, pageNum,pageSize)=> ajax('/api/products/productName',{productName, pageNum,pageSize})
 //模糊查询(商品描述)
 export const reqProductByDesc = (productDesc, pageNum,pageSize)=> ajax('/api/products/productDesc',{productDesc, pageNum,pageSize})
+//更新商品信息
+export const reqUpdateProductStatus = (productID, status) => ajax('/api/productStatus/'+productID,{status},"PUT")
 
 
 //和风天气
