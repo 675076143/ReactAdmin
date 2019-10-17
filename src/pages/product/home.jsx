@@ -51,7 +51,7 @@ export default class ProductHome extends Component{
                 render:(product)=>{
                     return (
                         <span>
-                            <a style={{margin:'0 5px'}}>详情</a>
+                            <a style={{margin:'0 5px'}} onClick={()=>this.props.history.push('/admin/product/details',product)}>详情</a>
                             <a>修改</a>
                         </span>
                     )

@@ -16,6 +16,8 @@ export const reqLogin = (userName, password) => {
 }
 
 //获取商品分类
+//分类名称
+export const reqCategoryName = (secondaryCategoryID)=> ajax('/api/categoryNames/'+secondaryCategoryID)
 //一级分类
 export const reqTopCategory = ()=>{
     return ajax('/api/topCategories')
