@@ -56,7 +56,7 @@ export default class ProductHome extends Component{
                     return (
                         <span>
                             <a style={{margin:'0 5px'}} onClick={()=>this.props.history.push('/admin/product/details',product)}>详情</a>
-                            <a>修改</a>
+                            <a onClick={()=>this.props.history.push('/admin/product/update',product)}>修改</a>
                         </span>
                     )
                 }
@@ -122,7 +122,7 @@ export default class ProductHome extends Component{
             </span>
         )
         const extra = (
-            <Button type='primary'>
+            <Button type='primary' onClick={()=>this.props.history.push('/admin/product/add')}>
                 <Icon type='plus'/>
                 添加商品
             </Button>
