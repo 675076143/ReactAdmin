@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {Card,Icon,Form,Input,Cascader,Upload,Button} from "antd";
 import number from "less/lib/less/functions/number";
-import {reqSecondaryCategory, reqTopCategory} from "../../api";
+import {reqSecondaryCategory, reqSecondaryCategoryBySecondaryCategoryID, reqTopCategory} from "../../api";
 
 const {TextArea} = Input
 const {Item} = Form
@@ -12,12 +12,13 @@ const {Item} = Form
 
 
 
-class ProductAdd extends Component{
+class ProductAddOrUpdate extends Component{
 
     state = {
-        options:[]
+        options:[],//级联选项数据
+        topCategoryID:0
     }
-    //获取一级列表
+    //获取一级列表, 如果当前是修改页面则应该把二级列表也获取到
     getTopCategories = async ()=>{
         const {data} = await reqTopCategory();
         const options = data.map(item =>({
@@ -25,9 +26,45 @@ class ProductAdd extends Component{
             label:item.topCategoryName,
             isLeaf:false
         }))
+
+        //根据二级分类ID获取到一级分类ID
+        const {updateOrAdd,product} = this
+        const {secondaryCategoryID} = product
+        //如果是更新页面
+        if(updateOrAdd){
+            //取到一级分类ID
+            const topCategoryID = await this.getTopCategoryID(secondaryCategoryID)
+            //通过一级分类ID来取得当前应该选中哪个一级分类
+            const targetOption = options.find(option=> option.value==topCategoryID)
+            //通过一级列表来取得所有子分类
+            const children = await this.getSecondaryCategories(topCategoryID)
+            //在选中的分类下添加子分类
+            targetOption.children = children
+        }
         this.setState({options})
         console.log(options)
     }
+    //根据一级列表ID获取二级列表Option
+    getSecondaryCategories = async (topCategoryID)=>{
+        //根据当前选中项获取二级列表
+        const {data} = await reqSecondaryCategory(topCategoryID)
+        const options = data.map(item =>({
+            value:item.secondaryCategoryID,
+            label:item.secondaryCategoryName,
+            isLeaf:true
+        }))
+        console.log("获取二级列表:",topCategoryID)
+        return options
+    }
+
+    //根据商品二级列表ID获取一级列表ID
+    getTopCategoryID = async (secondaryCategoryID)=>{
+        const {data} = await reqSecondaryCategoryBySecondaryCategoryID(secondaryCategoryID)
+        const {topCategoryID} = data
+        this.setState({topCategoryID})
+        return topCategoryID
+    }
+
 
     //级联选择改变时执行
     onChange = (value, selectedOptions) => {
@@ -41,12 +78,7 @@ class ProductAdd extends Component{
         //显示loading
         targetOption.loading = true;
         //根据当前选中项获取二级列表
-        const {data} = await reqSecondaryCategory(targetOption.value)
-        const options = data.map(item =>({
-            value:item.secondaryCategoryID,
-            label:item.secondaryCategoryName,
-            isLeaf:true
-        }))
+        const options = await this.getSecondaryCategories(targetOption.value)
         //隐藏loading
         targetOption.loading = false;
         //更新状态
@@ -84,18 +116,45 @@ class ProductAdd extends Component{
             }
         })
     }
+    componentWillMount() {
+        //取出上个页面携带的state
+        const product = this.props.location.state
+        console.log(product)
+        /*
+        * 两个感叹号能将其转为bool类型
+        * 如果product有值:
+        * !product->false
+        * !!product->true
+        * true: 更新商品
+        * false: 添加商品
+        * */
+        this.updateOrAdd = !!product
+        //保存product
+        this.product = product||{}
+    }
 
-    componentDidMount() {
+    componentDidMount () {
+        //取得一级分类列表
         this.getTopCategories()
     }
 
     render(){
+        const {updateOrAdd,product} = this
+        const {secondaryCategoryID} = product
+        const {topCategoryID} = this.state
+        //级联分类ID
+        const categoryID = []
+        if(updateOrAdd){//true代表是更新页面
+            categoryID.push(topCategoryID,secondaryCategoryID)
+        }
+        console.log("categoryID:  ",categoryID)
+
         const title = (
             <span>
                 <a onClick={()=>this.props.history.goBack()} style={{marginRight:10}}>
                     <Icon type='arrow-left'/>
                 </a>
-                <span>添加商品</span>
+                <span>{updateOrAdd ? '修改商品' : '添加商品'}</span>
             </span>
         )
 
@@ -123,6 +182,7 @@ class ProductAdd extends Component{
                 <Form {...formItemLayout} >
                     <Item label='商品名称' >
                         {getFieldDecorator('productName', {
+                            initialValue: product.productName,
                             rules: [
                                 {
                                     required: true,
@@ -133,6 +193,7 @@ class ProductAdd extends Component{
                     </Item>
                     <Item label='商品描述' >
                         {getFieldDecorator('productDesc', {
+                            initialValue: product.productDesc,
                             rules: [
                                 {
                                     required: true,
@@ -144,6 +205,7 @@ class ProductAdd extends Component{
                     </Item>
                     <Item label='商品价格' >
                         {getFieldDecorator('price', {
+                            initialValue: product.price,
                             rules: [
                                 {
                                     required: true,
@@ -157,7 +219,7 @@ class ProductAdd extends Component{
                     </Item>
                     <Item label='商品分类'>
                         {getFieldDecorator('category',{
-                            initialValue:[],
+                            initialValue:categoryID,
                             rules:[
                                 {required:true, message:'请选择商品分类!'},
                                 {validator:this.validateCategory}
@@ -179,4 +241,4 @@ class ProductAdd extends Component{
     }
 }
 
-export default Form.create()(ProductAdd)
+export default Form.create()(ProductAddOrUpdate)

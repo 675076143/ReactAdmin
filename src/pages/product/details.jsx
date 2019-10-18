@@ -28,6 +28,7 @@ export default class ProductDetails extends Component{
         }
     }
 
+
     componentDidMount() {
         const {secondaryCategoryID} = this.props.location.state
         this.getCategoryName(secondaryCategoryID)

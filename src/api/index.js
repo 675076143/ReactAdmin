@@ -24,7 +24,10 @@ export const reqTopCategory = ()=>{
 }
 //二级分类
 export const reqSecondaryCategory = (topCategoryID)=>{
-    return ajax('/api/secondaryCategory/'+topCategoryID)
+    return ajax('/api/secondaryCategories/'+topCategoryID)
+}
+export const reqSecondaryCategoryBySecondaryCategoryID = (secondaryCategoryID) =>{
+    return ajax('/api/secondaryCategory/'+secondaryCategoryID)
 }
 
 //修改商品分类
