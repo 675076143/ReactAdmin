@@ -59,6 +59,9 @@ export const reqProductByDesc = (productDesc, pageNum,pageSize)=> ajax('/api/pro
 //更新商品信息
 export const reqUpdateProductStatus = (productID, status) => ajax('/api/productStatus/'+productID,{status},"PUT")
 
+//图片上传
+export const reqUploadImg = (file) => ajax('/api/upload',{file});
+
 
 //和风天气
 export const reqWeather = (location) => {

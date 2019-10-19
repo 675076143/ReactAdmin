@@ -3,6 +3,7 @@ import {Redirect, Route, Switch} from "react-router-dom";
 import {Card,Icon,Form,Input,Cascader,Upload,Button} from "antd";
 import number from "less/lib/less/functions/number";
 import {reqSecondaryCategory, reqSecondaryCategoryBySecondaryCategoryID, reqTopCategory} from "../../api";
+import PicturesWall from "./pictures-wall";
 
 const {TextArea} = Input
 const {Item} = Form
@@ -18,6 +19,14 @@ class ProductAddOrUpdate extends Component{
         options:[],//级联选项数据
         topCategoryID:0
     }
+
+    //通过ref的方式, 在父组件中取得子组件
+    constructor(props){
+        super(props)
+        //创建用来保存ref标识的标签对象
+        this.picturesWall = React.createRef()
+    }
+
     //获取一级列表, 如果当前是修改页面则应该把二级列表也获取到
     getTopCategories = async ()=>{
         const {data} = await reqTopCategory();
@@ -64,7 +73,6 @@ class ProductAddOrUpdate extends Component{
         this.setState({topCategoryID})
         return topCategoryID
     }
-
 
     //级联选择改变时执行
     onChange = (value, selectedOptions) => {
@@ -113,6 +121,8 @@ class ProductAddOrUpdate extends Component{
             if(!errors){
                 alert("submit")
                 console.log(values)
+                //获取图片上传子组件的图片数据
+                const images = this.picturesWall.current.getAllImages()
             }
         })
     }
@@ -232,6 +242,9 @@ class ProductAddOrUpdate extends Component{
                             changeOnSelect
                         />)}
                     </Item>
+                    <Item label='商品图片'>
+                        <PicturesWall ref={this.picturesWall} productImg={product.image}/>
+                    </Item>
                     <Item>
                         <Button type='primary' onClick={this.submit}>提交</Button>
                     </Item>
@@ -242,3 +255,8 @@ class ProductAddOrUpdate extends Component{
 }
 
 export default Form.create()(ProductAddOrUpdate)
+
+/*
+* 子组件调用父组件: 将父组件的方法已函数的形式传递给子组件, 子组件就可以调用
+* 父组件调用子组件的方法: 在父组件中通过ref的方式得到子组件标签对象(组件), 调用其方法
+* */
