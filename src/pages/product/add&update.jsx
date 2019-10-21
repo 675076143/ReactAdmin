@@ -4,6 +4,7 @@ import {Card,Icon,Form,Input,Cascader,Upload,Button} from "antd";
 import number from "less/lib/less/functions/number";
 import {reqSecondaryCategory, reqSecondaryCategoryBySecondaryCategoryID, reqTopCategory} from "../../api";
 import PicturesWall from "./pictures-wall";
+import LinkButton from "../../components/link-button";
 
 const {TextArea} = Input
 const {Item} = Form
@@ -44,7 +45,7 @@ class ProductAddOrUpdate extends Component{
             //取到一级分类ID
             const topCategoryID = await this.getTopCategoryID(secondaryCategoryID)
             //通过一级分类ID来取得当前应该选中哪个一级分类
-            const targetOption = options.find(option=> option.value==topCategoryID)
+            const targetOption = options.find(option=> option.value===topCategoryID)
             //通过一级列表来取得所有子分类
             const children = await this.getSecondaryCategories(topCategoryID)
             //在选中的分类下添加子分类
@@ -161,9 +162,9 @@ class ProductAddOrUpdate extends Component{
 
         const title = (
             <span>
-                <a onClick={()=>this.props.history.goBack()} style={{marginRight:10}}>
+                <LinkButton onClick={()=>this.props.history.goBack()} style={{marginRight:10}}>
                     <Icon type='arrow-left'/>
-                </a>
+                </LinkButton>
                 <span>{updateOrAdd ? '修改商品' : '添加商品'}</span>
             </span>
         )

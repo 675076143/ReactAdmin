@@ -1,0 +1,8 @@
+.link-button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: dodgerblue;
+    cursor: pointer;
+    margin: 0 5px;
+}

@@ -71,10 +71,10 @@ export default class PicturesWall extends Component {
     * */
     handleChange = ({ file, fileList }) => {
         //图片添加完成(done)
-        if(file.status == 'done'){
+        if(file.status === 'done'){
             //获取接口返回结果
             const result = file.response
-            if(result.code == "200"){
+            if(result.code === "200"){
                 message.success("图片上传成功")
                 const {fileName,url} = result.data
                 //取出所有文件中的最后一个
@@ -85,7 +85,7 @@ export default class PicturesWall extends Component {
                 message.error("图片上传失败")
             }
 
-        }else if(file.status == 'removed') {//删除图片
+        }else if(file.status === 'removed') {//删除图片
             //调用删除图片接口, 后端还没写好
             message.error("快去写图片删除接口!!!")
         }

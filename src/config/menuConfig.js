@@ -33,27 +33,27 @@
 const menuConfig = [
     {
         key:'/admin/home',
-        icon:'pie-chart',
+        icon:'home',
         title:'首页'
     },
     {
         key:'/admin/user',
-        icon:'pie-chart',
+        icon:'user',
         title:'用户管理'
     },
     {
         key:'/admin/products',
-        icon:'pie-chart',
+        icon:'appstore',
         title:'商品',
         children:[
             {
                 key:'/admin/category',
-                icon:'pie-chart',
+                icon:'edit',
                 title:'品类管理'
             },
             {
                 key:'/admin/product',
-                icon:'pie-chart',
+                icon:'edit',
                 title:'商品管理'
             }
         ]
@@ -65,12 +65,12 @@ const menuConfig = [
         children:[
             {
                 key:'/admin/bar',
-                icon:'pie-chart',
+                icon:'bar-chart',
                 title:'柱状图'
             },
             {
                 key:'/admin/line',
-                icon:'pie-chart',
+                icon:'line-chart',
                 title:'折线图'
             },
             {
@@ -79,6 +79,11 @@ const menuConfig = [
                 title:'饼状图'
             },
         ]
+    },
+    {
+        key:'/admin/api',
+        icon:'api',
+        title:'接口文档'
     }
 ]
 

@@ -1,8 +1,8 @@
 import React, {Component} from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
 import {Card, Select, Input, Table, Button, Icon, message} from "antd";
 import {reqProduct, reqProductByDesc, reqProductByName, reqUpdateProductStatus} from "../../api";
 import {PAGE_SIZE} from "../../utils/constants";
+import LinkButton from "../../components/link-button";
 /*
 * 主页
 * */
@@ -38,13 +38,13 @@ export default class ProductHome extends Component{
                 //dataIndex: 'status',
                 render:(product)=>{
                     const{productID,status} = product
-                    const updateStatus = status==0 ? 1: 0
+                    const updateStatus = status===0 ? 1: 0
                     return(
                         <span>
                             <Button type='primary' onClick={()=>this.updateProductStatus(productID,updateStatus)}>
-                                {status==1?'上架':'下架'}
+                                {status===1?'上架':'下架'}
                             </Button><br/>
-                            <span>{status==1?'停售':'在售'}</span>
+                            <span>{status===1?'停售':'在售'}</span>
                         </span>
                     )
                 }
@@ -55,8 +55,8 @@ export default class ProductHome extends Component{
                 render:(product)=>{
                     return (
                         <span>
-                            <a style={{margin:'0 5px'}} onClick={()=>this.props.history.push('/admin/product/details',product)}>详情</a>
-                            <a onClick={()=>this.props.history.push('/admin/product/add&update',product)}>修改</a>
+                            <LinkButton style={{margin:'0 5px'}} onClick={()=>this.props.history.push('/admin/product/details',product)}>详情</LinkButton>
+                            <LinkButton onClick={()=>this.props.history.push('/admin/product/add&update',product)}>修改</LinkButton>
                         </span>
                     )
                 }
@@ -69,8 +69,8 @@ export default class ProductHome extends Component{
         this.setState({loading:true})//显示loading
         const {keyType,keyword} = this.state
         let result
-        if(keyword!=''){//判断关键字是否为空
-            if(keyType=="productName"){//判断查询类型
+        if(keyword!==''){//判断关键字是否为空
+            if(keyType==="productName"){//判断查询类型
                 result = await reqProductByName(keyword,pageNum,PAGE_SIZE)
             }else {
                 result = await reqProductByDesc(keyword,pageNum,PAGE_SIZE)
@@ -81,7 +81,7 @@ export default class ProductHome extends Component{
         }
 
         console.log(result)
-        if(result.code=="200"){
+        if(result.code==="200"){
             const {totalNum,product} = result.data
             this.setState({
                 totalNum:totalNum,
@@ -94,7 +94,7 @@ export default class ProductHome extends Component{
     //更新商品状态
     updateProductStatus = async (productID,status)=>{
         const result = await reqUpdateProductStatus(productID,status)
-        if(result.code == "200"){
+        if(result.code === "200"){
             message.success("更新状态成功!")
             this.getProducts(1)
         }
@@ -117,7 +117,7 @@ export default class ProductHome extends Component{
                     <Select.Option value='productName'>按名称搜索</Select.Option>
                     <Select.Option value='productDesc'>按描述搜索</Select.Option>
                 </Select>
-                <input placeholder='关键字' value={keyword} style={{width:150,margin:'0 15px'}} onChange={event => this.setState({keyword: event.target.value})}/>
+                <Input placeholder='关键字' value={keyword} style={{width:150,margin:'0 15px'}} onChange={event => this.setState({keyword: event.target.value})}/>
                 <Button type='primary' onClick={()=>{this.getProducts(1)}}>搜索</Button>
             </span>
         )

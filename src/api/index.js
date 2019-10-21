@@ -7,7 +7,7 @@
 * */
 
 import ajax from './ajax'
-import jsonp from 'jsonp'
+//import jsonp from 'jsonp'
 
 //登录
 export const reqLogin = (userName, password) => {

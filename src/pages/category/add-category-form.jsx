@@ -21,8 +21,7 @@ class AddCategoryForm extends Component{
                         getFieldDecorator(
                             'categoryID',
                             {initialValue: parentID}
-                        )
-                        (
+                        )(
                             <Select>
                                 <Select.Option value='0'>一级分类列表</Select.Option>
                                 {categories.map(item=><Select.Option value={String(item.topCategoryID)}>{item.topCategoryName}</Select.Option>)}
@@ -38,8 +37,7 @@ class AddCategoryForm extends Component{
                                 initialValue: '',
                                 rules:[{required:true,message:"请输入分类名称!"}]
                             }
-                        )
-                        (
+                        )(
                             <Input placeholder='分类名称'/>
                         )
                     }

@@ -12,7 +12,8 @@ import Pie from "../chars/pie"
 import User from "../user/user";
 import Category from "../category/category";
 import Product from "../product/product";
-const { Header, Footer, Sider, Content } = Layout;
+import Api from "../api/api";
+const { Footer, Sider, Content } = Layout;
 /*
 * 后台管理的路由组件
 * */
@@ -21,7 +22,7 @@ export default class Admin extends Component{
         const user = memoryUtils.user
         //如果内存中没有User
         //返回登录界面
-        if (JSON.stringify(user)=='{}'){
+        if (JSON.stringify(user)==='{}'){
             message.error("您还未登录！")
             return <Redirect to={'/login'}/>
         }
@@ -41,10 +42,11 @@ export default class Admin extends Component{
                             <Route path='/admin/line' component={Line}/>
                             <Route path='/admin/bar' component={Bar}/>
                             <Route path='/admin/pie' component={Pie}/>
+                            <Route path='/admin/api' component={Api}/>
                             <Redirect to='/admin/home' />
                         </Switch>
                     </Content>
-                    <Footer style={{textAlign:'center',color:'gray'}}>建议使用Chrome浏览器</Footer>
+                    <Footer style={{textAlign:'center',color:'gray',minHeight:80}}>建议使用Chrome浏览器</Footer>
                 </Layout>
             </Layout>
         )

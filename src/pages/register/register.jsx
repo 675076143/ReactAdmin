@@ -6,56 +6,20 @@ import {
     Input,
     Tooltip,
     Icon,
-    Cascader,
     Select,
     Row,
     Col,
     Checkbox,
     Button,
-    AutoComplete,
 } from 'antd';
+import LinkButton from "../../components/link-button";
 
 /*
 * 注册的路由组件
 * */
 
 const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
 
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
 
 class Register extends Component{
     state = {
@@ -96,7 +60,6 @@ class Register extends Component{
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { autoCompleteResult } = this.state;
 
         const formItemLayout = {
             labelCol: {
@@ -133,7 +96,7 @@ class Register extends Component{
         return (
             <div className='register'>
                 <header className='register-header'>
-                    <img className='logo' src={logo} />
+                    <img alt='logo' className='logo' src={logo} />
                     <h1>React后台管理项目</h1>
                 </header>
                 <section className='register-content'>
@@ -214,7 +177,7 @@ class Register extends Component{
                                 valuePropName: 'checked',
                             })(
                                 <Checkbox>
-                                    我已阅读 <a href="">用户协议</a>
+                                    我已阅读 <LinkButton href="">用户协议</LinkButton>
                                 </Checkbox>,
                             )}
                         </Form.Item>

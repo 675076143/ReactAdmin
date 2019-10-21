@@ -1,10 +1,9 @@
 import React, {Component} from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
 import {Card,Icon,List} from "antd";
-import {extractId} from "less/lib/less-browser/utils";
 import "./product.css"
 import {reqCategoryName} from "../../api";
 import {BASE_IMG_URL} from "../../utils/constants";
+import LinkButton from "../../components/link-button";
 
 const Item = List.Item
 /*
@@ -20,7 +19,7 @@ export default class ProductDetails extends Component{
 
     getCategoryName = async (secondaryCategoryID)=>{
         const result = await reqCategoryName(secondaryCategoryID)
-        if(result.code=="200"){
+        if(result.code==="200"){
             this.setState({
                 topCategoryName:result.data.topCategoryName,
                 secondaryCategoryName:result.data.secondaryCategoryName
@@ -37,13 +36,13 @@ export default class ProductDetails extends Component{
 
     render(){
         //读取上一个页面传来的state数据
-        const {productID, productName,productDesc,price,detail,image} = this.props.location.state
+        const {productName,productDesc,price,image} = this.props.location.state
         const {topCategoryName,secondaryCategoryName} = this.state
         const title = (
             <span>
-                <a onClick={()=>this.props.history.goBack()} style={{marginRight:10}}>
+                <LinkButton onClick={()=>this.props.history.goBack()} style={{marginRight:10}}>
                     <Icon type='arrow-left'/>
-                </a>
+                </LinkButton>
                 <span>商品详情</span>
             </span>
         )
@@ -70,7 +69,7 @@ export default class ProductDetails extends Component{
                     <Item>
                         <span className='left'>商品图片: </span>
                         <span>
-                            <img src={BASE_IMG_URL+image} className='product-img'/>
+                            <img  alt={image} src={BASE_IMG_URL+image} className='product-img'/>
                         </span>
                     </Item>
                 </List>
