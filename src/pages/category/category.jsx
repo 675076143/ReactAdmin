@@ -40,7 +40,7 @@ export default class Category extends Component{
                         <LinkButton onClick={()=>{this.openUpdateModal(category)}}>修改分类</LinkButton>
                         {//判断当前是否为一级分类, 如果是,显示"查看子分类"
                             dataIndex==='topCategoryName'
-                            ?<LinkButton style={{margin:"20px"}}
+                            ?<LinkButton style={{marginLeft:"20px"}}
                                 onClick={()=>{
                                     this.getSecondaryCategories(category.topCategoryID, category.topCategoryName)
                                 }}>查看子分类</LinkButton>
@@ -81,7 +81,7 @@ export default class Category extends Component{
     getSecondaryCategories = async (topCategoryID, topCategoryName) =>{
         console.log(topCategoryID,topCategoryName)
         const result = await reqSecondaryCategory(topCategoryID)
-        if(result.code === 200){
+        if(result.code === "200"){
             //更换列的dataIndex和key
             this.initColumns('secondaryCategoryName','secondaryCategoryID')
             const categories = result.data;

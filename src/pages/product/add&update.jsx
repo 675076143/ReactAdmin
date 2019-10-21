@@ -5,7 +5,7 @@ import number from "less/lib/less/functions/number";
 import {reqSecondaryCategory, reqSecondaryCategoryBySecondaryCategoryID, reqTopCategory} from "../../api";
 import PicturesWall from "./pictures-wall";
 import LinkButton from "../../components/link-button";
-
+import RichTextEditor from "./rich-text-editor";
 const {TextArea} = Input
 const {Item} = Form
 /*
@@ -26,6 +26,7 @@ class ProductAddOrUpdate extends Component{
         super(props)
         //创建用来保存ref标识的标签对象
         this.picturesWall = React.createRef()
+        this.richTextEditor = React.createRef()
     }
 
     //获取一级列表, 如果当前是修改页面则应该把二级列表也获取到
@@ -124,6 +125,9 @@ class ProductAddOrUpdate extends Component{
                 console.log(values)
                 //获取图片上传子组件的图片数据
                 const images = this.picturesWall.current.getAllImages()
+                //获取富文本子组件的商品详情数据
+                const detail = this.richTextEditor.current.getDetail()
+                console.log(detail)
             }
         })
     }
@@ -245,6 +249,9 @@ class ProductAddOrUpdate extends Component{
                     </Item>
                     <Item label='商品图片'>
                         <PicturesWall ref={this.picturesWall} productImg={product.image}/>
+                    </Item>
+                    <Item label='商品详情' labelCol={{span:2}} wrapperCol={{span:20}}>
+                        <RichTextEditor ref={this.richTextEditor} detail={product.detail}/>
                     </Item>
                     <Item>
                         <Button type='primary' onClick={this.submit}>提交</Button>

@@ -27,7 +27,7 @@ export default class Admin extends Component{
             return <Redirect to={'/login'}/>
         }
         return(
-            <Layout style={{height:'100%'}}>
+            <Layout style={{minHeight:'100%'}}>
                 <Sider>
                     <LeftNav/>
                 </Sider>
@@ -46,7 +46,7 @@ export default class Admin extends Component{
                             <Redirect to='/admin/home' />
                         </Switch>
                     </Content>
-                    <Footer style={{textAlign:'center',color:'gray',minHeight:80}}>建议使用Chrome浏览器</Footer>
+                    <Footer style={{textAlign:'center',color:'gray'}}>建议使用Chrome浏览器</Footer>
                 </Layout>
             </Layout>
         )
