@@ -58,6 +58,10 @@ export const reqProductByName = (productName, pageNum,pageSize)=> ajax('/api/pro
 export const reqProductByDesc = (productDesc, pageNum,pageSize)=> ajax('/api/products/productDesc',{productDesc, pageNum,pageSize})
 //更新商品信息
 export const reqUpdateProductStatus = (productID, status) => ajax('/api/productStatus/'+productID,{status},"PUT")
+//新增商品
+export const reqAddProduct = (product) =>ajax('/api/products',product,"POST")
+//修改商品
+export const reqUpdateProduct = (productID,product) =>ajax('/api/products/'+productID,product,"PUT")
 
 //图片上传
 export const reqUploadImg = (file) => ajax('/api/upload',{file});

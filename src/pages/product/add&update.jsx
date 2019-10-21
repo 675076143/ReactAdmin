@@ -1,8 +1,11 @@
 import React, {Component} from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
-import {Card,Icon,Form,Input,Cascader,Upload,Button} from "antd";
-import number from "less/lib/less/functions/number";
-import {reqSecondaryCategory, reqSecondaryCategoryBySecondaryCategoryID, reqTopCategory} from "../../api";
+import {Card,Icon,Form,Input,Cascader,Button,message} from "antd";
+import {
+    reqAddProduct,
+    reqSecondaryCategory,
+    reqSecondaryCategoryBySecondaryCategoryID,
+    reqTopCategory, reqUpdateProduct
+} from "../../api";
 import PicturesWall from "./pictures-wall";
 import LinkButton from "../../components/link-button";
 import RichTextEditor from "./rich-text-editor";
@@ -119,15 +122,44 @@ class ProductAddOrUpdate extends Component{
     //提交表单
     submit = () =>{
         //表单验证
-        this.props.form.validateFields((errors, values) => {
+        this.props.form.validateFields( async (errors, values) => {
             if(!errors){
-                alert("submit")
+                const {productName,productDesc,price,category} = values
+                const secondaryCategoryID = category[1];
+                const status = 0
+                console.log(values)
+                //alert("submit")
                 console.log(values)
                 //获取图片上传子组件的图片数据
                 const images = this.picturesWall.current.getAllImages()
+               // 获取图片名称
+
+                const image = images[0].name
+
                 //获取富文本子组件的商品详情数据
                 const detail = this.richTextEditor.current.getDetail()
-                console.log(detail)
+                const product = {productName,productDesc,price,secondaryCategoryID,detail,status,image}
+                console.log("取到的图片名称: ",image)
+                if(this.updateOrAdd){//如果是更新页面, 执行更新
+                    const {productID} = this.product
+                    const result = await reqUpdateProduct(productID,product)
+                    if(result.code === "200"){
+                        message.success("更新成功")
+                        //this.props.history.goBack()
+                    }else {
+                        message.error("更新失败")
+                    }
+
+                }else {//否则执行添加
+                    const result = await reqAddProduct(product);
+                    if(result.code === "200"){
+                        message.success("添加成功")
+                        this.props.history.goBack()
+                    }else {
+                        message.error("添加失败")
+                    }
+                }
+
             }
         })
     }
@@ -173,10 +205,6 @@ class ProductAddOrUpdate extends Component{
             </span>
         )
 
-
-        function onChange(value) {
-            console.log(value);
-        }
 
         //表单布局
         const formItemLayout = {
