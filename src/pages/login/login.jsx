@@ -6,6 +6,7 @@ import {reqLogin} from "../../api";
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
 import {Redirect} from "react-router-dom";
+import LinkButton from "../../components/link-button";
 
 /*
 * 登录的路由组件
@@ -26,7 +27,7 @@ class Login extends Component{
                 const {username, password} = values
                 const result = await reqLogin(username,password)
                 //console.log('请求成功',response.data)
-                if(result.code == "200"){//登陆成功
+                if(result.code === "200"){//登陆成功
                     message.success(result.msg)
                     //内存中保存User
                     memoryUtils.user = username;
@@ -50,7 +51,7 @@ class Login extends Component{
         const user = memoryUtils.user
         //如果内存中有User
         //返回admin界面
-        if (JSON.stringify(user)!='{}'){
+        if (JSON.stringify(user)!=='{}'){
             return <Redirect to={'/admin'}/>
         }
 
@@ -59,7 +60,7 @@ class Login extends Component{
         return(
             <div className='login'>
                 <header className='login-header'>
-                    <img src={logo} />
+                    <img alt='logo' className='logo' src={logo} />
                     <h1>React后台管理项目</h1>
                 </header>
                 <section className='login-content'>
@@ -116,9 +117,9 @@ class Login extends Component{
                                 valuePropName: 'checked',
                                 initialValue: true,
                             })(<Checkbox>记住账号</Checkbox>)}
-                            <a className="login-form-forgot" href="">
+                            <LinkButton>
                                 忘记密码
-                            </a>
+                            </LinkButton>
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登录
                             </Button>

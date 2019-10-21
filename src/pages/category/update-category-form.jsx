@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Form,Select,Input} from "antd";
+import {Form,Input} from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 /*
@@ -21,10 +21,7 @@ class UpdateCategoryForm extends Component{
                         getFieldDecorator(
                             'categoryName',
                             {initialValue: this.props.categoryName}
-                        )
-                        (
-                            <Input placeholder='分类名称'/>
-                        )
+                        )(<Input placeholder='分类名称'/>)
                     }
 
                 </FormItem>

@@ -21,11 +21,12 @@ export default function ajax (url, data={}, method="GET") {
         NProgress.start()
         let promise
         //1. 执行异步Ajax请求
-        if (method=="GET"){//get请求
+        if (method==="GET"){//get请求
+            console.log("Get data:",data)
             promise = axios.get(url, {
                 params: data
             })
-        }else if(method=="PUT"){//put请求
+        }else if(method==="PUT"){//put请求
             console.log("Put data: ",data)
             promise = axios.put(url, Qs.stringify(data))
         }

@@ -7,7 +7,7 @@
 * */
 
 import ajax from './ajax'
-import jsonp from 'jsonp'
+//import jsonp from 'jsonp'
 
 //登录
 export const reqLogin = (userName, password) => {
@@ -16,13 +16,18 @@ export const reqLogin = (userName, password) => {
 }
 
 //获取商品分类
+//分类名称
+export const reqCategoryName = (secondaryCategoryID)=> ajax('/api/categoryNames/'+secondaryCategoryID)
 //一级分类
 export const reqTopCategory = ()=>{
     return ajax('/api/topCategories')
 }
 //二级分类
 export const reqSecondaryCategory = (topCategoryID)=>{
-    return ajax('/api/secondaryCategory/'+topCategoryID)
+    return ajax('/api/secondaryCategories/'+topCategoryID)
+}
+export const reqSecondaryCategoryBySecondaryCategoryID = (secondaryCategoryID) =>{
+    return ajax('/api/secondaryCategory/'+secondaryCategoryID)
 }
 
 //修改商品分类
@@ -43,6 +48,23 @@ export const reqAddTopCategory = (topCategoryName)=>{
 export const reqAddSecondaryCategory = (secondaryCategoryName,topCategoryID)=>{
     return ajax('/api/secondaryCategory/'+secondaryCategoryName,{topCategoryID},'POST')
 }
+
+//商品列表
+//获取商品列表
+export const reqProduct = (pageNum,pageSize)=> ajax('/api/products',{pageNum,pageSize})
+//模糊查询(商品名称)
+export const reqProductByName = (productName, pageNum,pageSize)=> ajax('/api/products/productName',{productName, pageNum,pageSize})
+//模糊查询(商品描述)
+export const reqProductByDesc = (productDesc, pageNum,pageSize)=> ajax('/api/products/productDesc',{productDesc, pageNum,pageSize})
+//更新商品信息
+export const reqUpdateProductStatus = (productID, status) => ajax('/api/productStatus/'+productID,{status},"PUT")
+//新增商品
+export const reqAddProduct = (product) =>ajax('/api/products',product,"POST")
+//修改商品
+export const reqUpdateProduct = (productID,product) =>ajax('/api/products/'+productID,product,"PUT")
+
+//图片上传
+export const reqUploadImg = (file) => ajax('/api/upload',{file});
 
 
 //和风天气

@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {Redirect, Route} from "react-router-dom";
 import {Card, Button, Icon, Table, message, Modal} from 'antd';
 import {reqTopCategory,
         reqSecondaryCategory,
@@ -9,6 +8,7 @@ import {reqTopCategory,
         reqAddSecondaryCategory} from "../../api";
 import UpdateCategoryForm from "./update-category-form";
 import AddCategoryForm from "./add-category-form"
+import LinkButton from "../../components/link-button";
 /*
 * 主页
 * */
@@ -37,13 +37,13 @@ export default class Category extends Component{
                 key: 'x',
                 render: (category) => (
                     <span>
-                        <a onClick={()=>{this.openUpdateModal(category)}}>修改分类</a>
+                        <LinkButton onClick={()=>{this.openUpdateModal(category)}}>修改分类</LinkButton>
                         {//判断当前是否为一级分类, 如果是,显示"查看子分类"
-                            dataIndex=='topCategoryName'
-                            ?<a style={{margin:"20px"}}
+                            dataIndex==='topCategoryName'
+                            ?<LinkButton style={{marginLeft:"20px"}}
                                 onClick={()=>{
                                     this.getSecondaryCategories(category.topCategoryID, category.topCategoryName)
-                                }}>查看子分类</a>
+                                }}>查看子分类</LinkButton>
                             :' '}
                     </span>
                 )
@@ -56,7 +56,7 @@ export default class Category extends Component{
         //发送请求前显示loading
         this.setState({loading:true})
         const  result = await reqTopCategory();
-        if(result.code == 200){
+        if(result.code === "200"){
             //更换列的dataIndex和key
             this.initColumns('topCategoryName','topCategoryID')
             const categories = result.data;
@@ -81,7 +81,7 @@ export default class Category extends Component{
     getSecondaryCategories = async (topCategoryID, topCategoryName) =>{
         console.log(topCategoryID,topCategoryName)
         const result = await reqSecondaryCategory(topCategoryID)
-        if(result.code == 200){
+        if(result.code === "200"){
             //更换列的dataIndex和key
             this.initColumns('secondaryCategoryName','secondaryCategoryID')
             const categories = result.data;
@@ -105,15 +105,17 @@ export default class Category extends Component{
         this.form.validateFields(async (err,values)=>{
             if(!err){
                 const {categoryID,categoryName} = values
+                //清除输入数据
+                this.form.resetFields()
                 //categoryID为0时 添加一级分类, 否则添加二级分类
-                if(categoryID==0){
+                if(categoryID===0){
                     const result = await reqAddTopCategory(categoryName)
-                    if(result.code=="200"){
+                    if(result.code==="200"){
                         this.getTopCategories()
                     }
                 }else{
                     const result = await reqAddSecondaryCategory(categoryName, parentID)
-                    if(result.code=="200"){
+                    if(result.code==="200"){
                         this.getSecondaryCategories(parentID)
                     }
                 }
@@ -136,21 +138,21 @@ export default class Category extends Component{
         //清除输入数据
         this.form.resetFields()
         //判断修改的是一级分类还是二级分类
-        if(this.state.categoryLevel == 1){//一级分类
+        if(this.state.categoryLevel === 1){//一级分类
             categoryID = category.topCategoryID;
             console.log("修改一级分类",categoryID,categoryName)
             const result = await reqUpdateTopCategory(categoryID,categoryName)
             console.log(result)
-            if(result.code=="200"){
+            if(result.code==="200"){
                 //重新获取所有数据
                 this.getTopCategories()
             }
-        }else if(this.state.categoryLevel == 2){//二级分类
+        }else if(this.state.categoryLevel === 2){//二级分类
             categoryID = category.secondaryCategoryID;
             console.log("修改二级分类",categoryID,categoryName)
             const result = await reqUpdateSecondaryCategory(categoryID,categoryName)
             console.log(result)
-            if(result.code=="200"){
+            if(result.code==="200"){
                 //重新获取所有数据
                 this.getSecondaryCategories(parentID,parentName)
             }
@@ -206,7 +208,7 @@ export default class Category extends Component{
         const {categoryLevel,parentName,parentID,categories,loading,rowKey,modalVisible} = this.state
         const title = categoryLevel===1?'一级分类列表':(
             <span>
-                <a onClick={this.getTopCategories}>一级分类列表</a>
+                <LinkButton onClick={this.getTopCategories}>一级分类列表</LinkButton>
                 <Icon type='arrow-right' style={{marginRight:5,marginLeft:5}}/>
                 <span>{parentName}</span>
             </span>

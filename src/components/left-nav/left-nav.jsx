@@ -69,7 +69,7 @@ export class LeftNav extends Component{
         return(
             <div className='left-nav'>
                 <Link to='/admin' className='left-nav-header'>
-                    <img src={logo} />
+                    <img className='logo' src={logo} alt='logo' />
                     <h1>后台管理</h1>
                 </Link>
 

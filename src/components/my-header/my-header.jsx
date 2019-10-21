@@ -2,12 +2,12 @@ import React, {Component} from "react";
 import {withRouter} from "react-router-dom";
 import './my-header.css'
 import memoryUtils from "../../utils/memoryUtils";
-import ajax from "../../api/ajax";
 import {reqWeather} from "../../api";
 import {formateDate} from "../../utils/dateUtils"
 import menuConfig from "../../config/menuConfig";
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 import storageUtils from "../../utils/storageUtils";
+import LinkButton from "../link-button";
 const { confirm } = Modal;
 
 
@@ -39,11 +39,11 @@ export class MyHeader extends Component{
         let title = ''
         const pathname = this.props.location.pathname
         menuConfig.forEach(item=>{
-            if(item.key==pathname){
+            if(item.key===pathname){
                 title = item.title
             }else if(item.children){
                 item.children.forEach(item=>{
-                    if(item.key==pathname){
+                    if(item.key===pathname){
                         title = item.title
                     }
                 })
@@ -85,12 +85,12 @@ export class MyHeader extends Component{
 
     render() {
         console.log(this.getTitle())
-        const {currentTime,weather} = this.state
+        const {currentTime} = this.state
         return(
             <div className='my-header'>
                 <div className='my-header-top'>
                     欢迎，{memoryUtils.user}
-                    <a onClick={this.logout}>退出</a>
+                    <LinkButton onClick={this.logout}>退出</LinkButton>
                 </div>
                 <hr/>
                 <div className='my-header-bottom'>
