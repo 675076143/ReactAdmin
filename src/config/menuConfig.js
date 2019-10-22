@@ -42,6 +42,12 @@ const menuConfig = [
         title:'用户管理'
     },
     {
+        key:'/admin/role',
+        icon:'safety-certificate',
+        title:'角色管理'
+
+    },
+    {
         key:'/admin/products',
         icon:'appstore',
         title:'商品',

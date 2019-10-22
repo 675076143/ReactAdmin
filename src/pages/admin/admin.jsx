@@ -13,6 +13,7 @@ import User from "../user/user";
 import Category from "../category/category";
 import Product from "../product/product";
 import Api from "../api/api";
+import Role from "../role/role";
 const { Footer, Sider, Content } = Layout;
 /*
 * 后台管理的路由组件
@@ -37,6 +38,7 @@ export default class Admin extends Component{
                         <Switch>
                             <Route path='/admin/home' component={Home}/>
                             <Route path='/admin/user' component={User}/>
+                            <Route path='/admin/role' component={Role}/>
                             <Route path='/admin/category' component={Category}/>
                             <Route path='/admin/product' component={Product}/>
                             <Route path='/admin/line' component={Line}/>

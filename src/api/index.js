@@ -66,6 +66,9 @@ export const reqUpdateProduct = (productID,product) =>ajax('/api/products/'+prod
 //图片上传
 export const reqUploadImg = (file) => ajax('/api/upload',{file});
 
+//角色
+export const reqRoles = ()=>ajax('/api/roles');
+
 
 //和风天气
 export const reqWeather = (location) => {
@@ -86,7 +89,3 @@ export const reqWeather = (location)=> {
     })
 }
 */
-
-
-
-
