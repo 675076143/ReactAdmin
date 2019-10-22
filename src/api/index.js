@@ -32,12 +32,12 @@ export const reqSecondaryCategoryBySecondaryCategoryID = (secondaryCategoryID) =
 
 //修改商品分类
 //一级分类
-export const reqUpdateTopCategory = (topCategoryID,topCategoryName)=>{
-    return ajax('/api/topCategories/'+topCategoryID,{topCategoryName},"PUT")
+export const reqUpdateTopCategory = (topCategoryID,data)=>{
+    return ajax('/api/topCategories/'+topCategoryID,data,"PUT")
 }
 //二级分类
-export const reqUpdateSecondaryCategory = (secondaryCategoryID,secondaryCategoryName)=>{
-    return ajax('/api/secondaryCategory/'+secondaryCategoryID,{secondaryCategoryName},"PUT")
+export const reqUpdateSecondaryCategory = (secondaryCategoryID,data)=>{
+    return ajax('/api/secondaryCategory/'+secondaryCategoryID,data,"PUT")
 }
 //添加商品分类
 //一级分类
@@ -66,7 +66,13 @@ export const reqUpdateProduct = (productID,product) =>ajax('/api/products/'+prod
 //图片上传
 export const reqUploadImg = (file) => ajax('/api/upload',{file});
 
-
+//角色
+//获取所有角色
+export const reqRoles = ()=>ajax('/api/roles');
+//添加角色
+export const reqAddRoles = (roleName)=>ajax('/api/roles',{roleName},'POST')
+//修改角色
+export const reqAuthRole = (roleID, data) =>ajax('/api/rolePermissions/'+roleID,data,'PUT')
 //和风天气
 export const reqWeather = (location) => {
     const url = `https://free-api.heweather.com/s6/weather`
@@ -86,7 +92,3 @@ export const reqWeather = (location)=> {
     })
 }
 */
-
-
-
-
