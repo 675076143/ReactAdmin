@@ -28,7 +28,7 @@ export default function ajax (url, data={}, method="GET") {
             })
         }else if(method==="PUT"){//put请求
             console.log("Put data: ",data)
-            promise = axios.put(url, Qs.stringify(data))
+            promise = axios.put(url, data)
         }
         else {//post请求
             promise = axios.post(url,Qs.stringify(data))

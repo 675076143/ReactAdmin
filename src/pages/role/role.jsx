@@ -1,10 +1,10 @@
 import React,{Component} from "react";
 import {Button, Card, message, Modal, Table} from "antd";
 import {formateDate} from "../../utils/dateUtils";
-import {PAGE_SIZE} from "../../utils/constants";
-import {reqAddRoles, reqRoles} from "../../api";
+import {reqAddRoles, reqAuthRole, reqRoles} from "../../api";
 import AddRoleForm from "./add-role-form";
 import AuthRoleForm from "./auth-role-form";
+import user from '../../utils/memoryUtils'
 
 export default class Role extends Component{
 
@@ -13,6 +13,11 @@ export default class Role extends Component{
         roles:[],//所有角色
         role:{},//当前选中的角色
         modalVisible:0//0不可见,1添加角色可见,2设置权限可见
+    }
+    //取到子组件的值
+    constructor (props){
+        super(props)
+        this.authRoleForm = React.createRef()
     }
 
     //初始化列
@@ -82,7 +87,26 @@ export default class Role extends Component{
 
     }
     //设置权限
-    authRole = ()=>{
+    authRole = async ()=>{
+        const {role} = this.state
+        const {roleID} = role
+        const rolePermissions = this.authRoleForm.current.getRolePermissions();
+        //取出内存中存储的user, 将其作为授权者
+        const authName = user.user
+        console.log(roleID,rolePermissions,authName)
+        const testJson = {
+            rolePermissions:[],
+            authName: null
+        }
+        testJson.rolePermissions = rolePermissions
+        testJson.authName = authName
+        const result = await reqAuthRole(roleID, testJson)
+        if(result.code==='200'){
+            message.success('授权成功! ')
+            this.initRoles()
+        }else {
+            message.error('授权失败! ')
+        }
         this.setState({
             modalVisible:0
         })
@@ -143,8 +167,10 @@ export default class Role extends Component{
                     onOk={this.authRole}
                     onCancel={this.handleCancel}
                 >
-                    {/*setForm: 将组件传递给父组件!!!*/}
-                    <AuthRoleForm role={role} />
+                    {/*setForm: 将组件传递给父组件!!!
+                       ref: 取到子组件的值
+                    */}
+                    <AuthRoleForm role={role} ref={this.authRoleForm} />
                 </Modal>
             </Card>
         )

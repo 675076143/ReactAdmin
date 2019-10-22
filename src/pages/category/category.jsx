@@ -140,21 +140,30 @@ export default class Category extends Component{
         //判断修改的是一级分类还是二级分类
         if(this.state.categoryLevel === 1){//一级分类
             categoryID = category.topCategoryID;
-            console.log("修改一级分类",categoryID,categoryName)
-            const result = await reqUpdateTopCategory(categoryID,categoryName)
-            console.log(result)
+            const data = {
+                topCategoryName:categoryName
+            }
+            const result = await reqUpdateTopCategory(categoryID,data)
             if(result.code==="200"){
+                message.success("更新成功")
                 //重新获取所有数据
                 this.getTopCategories()
+            }else {
+                message.error("更新失败")
             }
         }else if(this.state.categoryLevel === 2){//二级分类
             categoryID = category.secondaryCategoryID;
-            console.log("修改二级分类",categoryID,categoryName)
-            const result = await reqUpdateSecondaryCategory(categoryID,categoryName)
+            const data = {
+                secondaryCategoryName:categoryName
+            }
+            const result = await reqUpdateSecondaryCategory(categoryID,data)
             console.log(result)
             if(result.code==="200"){
+                message.success("修改成功")
                 //重新获取所有数据
                 this.getSecondaryCategories(parentID,parentName)
+            }else {
+                message.error("修改失败")
             }
         }
 

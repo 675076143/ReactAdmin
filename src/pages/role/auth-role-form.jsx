@@ -9,9 +9,21 @@ const { TreeNode } = Tree;
 * */
 export default class AuthRoleForm extends Component{
 
-    state = {
-        role: this.props.role,
+    constructor(props){
+        super(props)
+        //根据角色权限数组生成初始状态
+        const {rolePermissions} = this.props.role
+        this.state = {
+            checkedKeys:rolePermissions
+        }
     }
+
+    getRolePermissions = ()=> this.state.checkedKeys
+
+    onCheck = checkedKeys => {
+        console.log('onCheck', checkedKeys);
+        this.setState({ checkedKeys });
+    };
 
     getTreeNode = (menuConfig)=>{
 
@@ -38,9 +50,9 @@ export default class AuthRoleForm extends Component{
         this.treeNode = this.getTreeNode(menuConfig)
     }
     render() {
-
-        const {role} = this.state
+        const {role} = this.props
         const {roleName} = role
+        const {checkedKeys} = this.state
         //表单布局
         const formItemLayout = {
             labelCol: {
@@ -58,7 +70,9 @@ export default class AuthRoleForm extends Component{
                     <Input value={roleName} disabled/>
                 </FormItem>
                 <FormItem>
-                    <Tree checkable defaultExpandAll checkedKeys={role.permissions}>
+                    <Tree checkable defaultExpandAll
+                          checkedKeys={checkedKeys}
+                          onCheck={this.onCheck}>
                         <TreeNode title='平台权限' key='root'>
                             {this.treeNode}
                         </TreeNode>

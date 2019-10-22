@@ -36,16 +36,16 @@ export default class Admin extends Component{
                     <MyHeader/>
                     <Content style={{backgroundColor:'white',margin:20}}>
                         <Switch>
-                            <Route path='/admin/home' component={Home}/>
-                            <Route path='/admin/user' component={User}/>
-                            <Route path='/admin/role' component={Role}/>
-                            <Route path='/admin/category' component={Category}/>
-                            <Route path='/admin/product' component={Product}/>
-                            <Route path='/admin/line' component={Line}/>
-                            <Route path='/admin/bar' component={Bar}/>
-                            <Route path='/admin/pie' component={Pie}/>
-                            <Route path='/admin/api' component={Api}/>
-                            <Redirect to='/admin/home' />
+                            <Route path='/home' component={Home}/>
+                            <Route path='/user' component={User}/>
+                            <Route path='/role' component={Role}/>
+                            <Route path='/category' component={Category}/>
+                            <Route path='/product' component={Product}/>
+                            <Route path='/line' component={Line}/>
+                            <Route path='/bar' component={Bar}/>
+                            <Route path='/pie' component={Pie}/>
+                            <Route path='/api' component={Api}/>
+                            <Redirect to='/home' />
                         </Switch>
                     </Content>
                     <Footer style={{textAlign:'center',color:'gray'}}>建议使用Chrome浏览器</Footer>
