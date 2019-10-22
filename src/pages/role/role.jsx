@@ -4,6 +4,7 @@ import {formateDate} from "../../utils/dateUtils";
 import {PAGE_SIZE} from "../../utils/constants";
 import {reqAddRoles, reqRoles} from "../../api";
 import AddRoleForm from "./add-role-form";
+import AuthRoleForm from "./auth-role-form";
 
 export default class Role extends Component{
 
@@ -80,10 +81,19 @@ export default class Role extends Component{
         })
 
     }
+    //设置权限
+    authRole = ()=>{
+        this.setState({
+            modalVisible:0
+        })
+    }
+
     //关闭Modal
     handleCancel = () =>{
-        //清除输入数据
-        this.form.resetFields()
+        if(this.state.modalVisible===1){
+            //清除输入数据
+            this.form.resetFields()
+        }
         //更新状态
         this.setState({
             modalVisible:0
@@ -103,7 +113,7 @@ export default class Role extends Component{
         const title = (
             <span>
                 <Button type='primary' style={{marginRight:10}} onClick={()=>{this.setState({modalVisible: 1})}}>创建角色</Button>
-                <Button type='primary' disabled={!role.roleID}>设置角色权限</Button>
+                <Button type='primary' disabled={!role.roleID} onClick={()=>{this.setState({modalVisible: 2})}}>设置角色权限</Button>
             </span>
         )
         return(
@@ -126,6 +136,15 @@ export default class Role extends Component{
                 >
                     {/*setForm: 将组件传递给父组件!!!*/}
                     <AddRoleForm setForm={(form)=>{this.form = form}}/>
+                </Modal>
+                <Modal
+                    title="设置权限"
+                    visible={modalVisible===2}
+                    onOk={this.authRole}
+                    onCancel={this.handleCancel}
+                >
+                    {/*setForm: 将组件传递给父组件!!!*/}
+                    <AuthRoleForm role={role} />
                 </Modal>
             </Card>
         )
