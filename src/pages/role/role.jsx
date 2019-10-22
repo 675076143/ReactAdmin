@@ -1,17 +1,20 @@
 import React,{Component} from "react";
-import {Button, Card, Table} from "antd";
+import {Button, Card, message, Modal, Table} from "antd";
 import {formateDate} from "../../utils/dateUtils";
 import {PAGE_SIZE} from "../../utils/constants";
-import {reqRoles} from "../../api";
+import {reqAddRoles, reqRoles} from "../../api";
+import AddRoleForm from "./add-role-form";
 
 export default class Role extends Component{
 
     state ={
         loading:false,
         roles:[],//所有角色
-        role:{}//当前选中的角色
+        role:{},//当前选中的角色
+        modalVisible:0//0不可见,1添加角色可见,2设置权限可见
     }
 
+    //初始化列
     initColumns = ()=>{
         this.columns = [
             {
@@ -38,7 +41,7 @@ export default class Role extends Component{
             },
         ]
     }
-
+    //初始化数据
     initRoles = async ()=>{
         const result = await reqRoles()
         if(result.code==="200"){
@@ -46,7 +49,7 @@ export default class Role extends Component{
             this.setState({roles})
         }
     }
-
+    //当选中的role发生改变时
     onRow = (role)=>{
         return{
             onClick: event =>{//点击行
@@ -55,7 +58,37 @@ export default class Role extends Component{
             }
         }
     }
+    //添加角色
+    addRole = async () =>{
+        this.form.validateFields( async (err,values)=>{
+            if(!err){
+                const {roleName} = values
+                const result = await reqAddRoles(roleName)
+                if(result.code==='200'){
+                    message.success("添加角色成功")
+                    this.initRoles()
+                }else {
+                    message.error("添加角色失败")
+                }
+            }
+        })
+        //清除输入数据
+        this.form.resetFields()
+        //更新状态
+        this.setState({
+            modalVisible:0
+        })
 
+    }
+    //关闭Modal
+    handleCancel = () =>{
+        //清除输入数据
+        this.form.resetFields()
+        //更新状态
+        this.setState({
+            modalVisible:0
+        })
+    }
 
     componentWillMount() {
         this.initColumns()
@@ -66,10 +99,10 @@ export default class Role extends Component{
 
     render() {
 
-        const {role,roles,loading} = this.state
+        const {role,roles,loading,modalVisible} = this.state
         const title = (
             <span>
-                <Button type='primary' style={{marginRight:10}}>创建角色</Button>
+                <Button type='primary' style={{marginRight:10}} onClick={()=>{this.setState({modalVisible: 1})}}>创建角色</Button>
                 <Button type='primary' disabled={!role.roleID}>设置角色权限</Button>
             </span>
         )
@@ -79,12 +112,21 @@ export default class Role extends Component{
                     loading={loading}
                     rowKey='roleID'
                     bordered={true}
-                    pagination={{defaultPageSize:PAGE_SIZE}}
+                    pagination={{defaultPageSize:6}}
                     columns={this.columns}
                     dataSource={roles}
                     onRow={this.onRow}
                     rowSelection={{type:'radio', selectedRowKeys:[role.roleID]}}
                 />
+                <Modal
+                    title="添加角色"
+                    visible={modalVisible===1}
+                    onOk={this.addRole}
+                    onCancel={this.handleCancel}
+                >
+                    {/*setForm: 将组件传递给父组件!!!*/}
+                    <AddRoleForm setForm={(form)=>{this.form = form}}/>
+                </Modal>
             </Card>
         )
     }

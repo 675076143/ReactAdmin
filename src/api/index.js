@@ -67,8 +67,10 @@ export const reqUpdateProduct = (productID,product) =>ajax('/api/products/'+prod
 export const reqUploadImg = (file) => ajax('/api/upload',{file});
 
 //角色
+//获取所有角色
 export const reqRoles = ()=>ajax('/api/roles');
-
+//添加角色
+export const reqAddRoles = (roleName)=>ajax('/api/roles',{roleName},'POST')
 
 //和风天气
 export const reqWeather = (location) => {
