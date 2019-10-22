@@ -25,6 +25,8 @@ export default class AuthRoleForm extends Component{
         this.setState({ checkedKeys });
     };
 
+
+
     getTreeNode = (menuConfig)=>{
 
         //使用map或者reduce, 根据菜单配置动态生成权限列表
@@ -48,6 +50,17 @@ export default class AuthRoleForm extends Component{
 
     componentWillMount(){
         this.treeNode = this.getTreeNode(menuConfig)
+    }
+
+    //根据新传入的role来更新checkedKey状态
+    /*
+    * 当组件收到新的属性的时候自动调用
+    * */
+    componentWillReceiveProps(nextProps, nextContext) {
+        const checkedKeys = nextProps.role.rolePermissions
+        this.setState({checkedKeys})
+        //console.log("收到的数值发生改变啦: ",checkedKeys)
+        //this.state.checkedKeys = checkedKeys
     }
     render() {
         const {role} = this.props

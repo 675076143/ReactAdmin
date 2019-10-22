@@ -93,16 +93,17 @@ export default class Role extends Component{
         const rolePermissions = this.authRoleForm.current.getRolePermissions();
         //取出内存中存储的user, 将其作为授权者
         const authName = user.user
-        console.log(roleID,rolePermissions,authName)
-        const testJson = {
-            rolePermissions:[],
-            authName: null
+        const data = {
+            permissionNames:[],
+            authName: authName
         }
-        testJson.rolePermissions = rolePermissions
-        testJson.authName = authName
-        const result = await reqAuthRole(roleID, testJson)
+        data.permissionNames = rolePermissions
+        data.authName = authName
+        const result = await reqAuthRole(roleID, data)
         if(result.code==='200'){
             message.success('授权成功! ')
+            const role = result.data
+            this.setState({role})
             this.initRoles()
         }else {
             message.error('授权失败! ')
@@ -127,6 +128,8 @@ export default class Role extends Component{
     componentWillMount() {
         this.initColumns()
     }
+
+
     componentDidMount() {
         this.initRoles()
     }
