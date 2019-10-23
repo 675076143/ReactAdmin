@@ -69,6 +69,8 @@ export const reqUploadImg = (file) => ajax('/api/upload',{file});
 //角色
 //获取所有角色
 export const reqRoles = ()=>ajax('/api/roles');
+//获取单个角色信息
+export const reqRoleByRoleID = (roleID) => ajax('/api/roles/'+roleID)
 //添加角色
 export const reqAddRoles = (roleName)=>ajax('/api/roles',{roleName},'POST')
 //修改角色
@@ -82,6 +84,12 @@ export const reqWeather = (location) => {
     }
     return ajax(url,data)
 }
+
+//用户
+//获取所有用户
+export const reqUsers = ()=>ajax('/api/users')
+//根据用户名获取用户信息
+export const reqUserByUserName = (userName)=>ajax('/api/users/'+userName)
 
 //和风天气jsonp请求
 /*
