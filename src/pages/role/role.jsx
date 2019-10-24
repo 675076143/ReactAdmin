@@ -135,7 +135,7 @@ export default class Role extends Component{
     }
 
     render() {
-
+        console.log("ref:",this.authRoleForm)
         const {role,roles,loading,modalVisible} = this.state
         const title = (
             <span>
