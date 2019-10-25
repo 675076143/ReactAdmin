@@ -92,7 +92,7 @@ export default class Role extends Component{
         const {roleID} = role
         const rolePermissions = this.authRoleForm.current.getRolePermissions();
         //取出内存中存储的user, 将其作为授权者
-        const authName = user.user
+        const authName = user.user.userName
         const data = {
             permissionNames:[],
             authName: authName
@@ -101,6 +101,7 @@ export default class Role extends Component{
         data.authName = authName
         const result = await reqAuthRole(roleID, data)
         if(result.code==='200'){
+            //如果当前设置的是登录的角色,应该强制退出登录
             message.success('授权成功! ')
             const role = result.data
             this.setState({role})

@@ -89,7 +89,7 @@ export class MyHeader extends Component{
         return(
             <div className='my-header'>
                 <div className='my-header-top'>
-                    欢迎，{memoryUtils.user}
+                    欢迎，{memoryUtils.user.userName}
                     <LinkButton onClick={this.logout}>退出</LinkButton>
                 </div>
                 <hr/>

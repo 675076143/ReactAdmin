@@ -101,16 +101,12 @@ class Register extends Component{
                 </header>
                 <section className='register-content'>
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-                        <Form.Item label="电子邮箱">
-                            {getFieldDecorator('email', {
+                        <Form.Item label="用户名">
+                            {getFieldDecorator('userName', {
                                 rules: [
                                     {
-                                        type: 'email',
-                                        message: '这不是一个有效的电子邮箱！',
-                                    },
-                                    {
                                         required: true,
-                                        message: '请输入您的电子邮箱！',
+                                        message: '请输入用户名！',
                                     },
                                 ],
                             })(<Input />)}
@@ -141,18 +137,18 @@ class Register extends Component{
                                 ],
                             })(<Input.Password onBlur={this.handleConfirmBlur} />)}
                         </Form.Item>
-                        <Form.Item
-                            label={
-                                <span>
-              昵称&nbsp;
-                                    <Tooltip title="您希望别人如何称呼您？">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
-                            }
-                        >
-                            {getFieldDecorator('nickname', {
-                                rules: [{ required: true, message: '请输入您的昵称！', whitespace: true }],
+                        <Form.Item label="电子邮箱">
+                            {getFieldDecorator('email', {
+                                rules: [
+                                    {
+                                        type: 'email',
+                                        message: '这不是一个有效的电子邮箱！',
+                                    },
+                                    {
+                                        required: true,
+                                        message: '请输入您的电子邮箱！',
+                                    },
+                                ],
                             })(<Input />)}
                         </Form.Item>
                         <Form.Item label="手机号码">

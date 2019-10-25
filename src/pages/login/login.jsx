@@ -30,9 +30,10 @@ class Login extends Component{
                 if(result.code === "200"){//登陆成功
                     message.success(result.msg)
                     //内存中保存User
-                    memoryUtils.user = username;
+                    memoryUtils.user = result.data;
                     //localstorage中保存User
-                    storageUtils.setUser(username)
+
+                    storageUtils.setUser(result.data)
                     //跳转到后台管理页面
                     //由于不需要回退到登录界面，所以用replace
                     //如果需要则应用push

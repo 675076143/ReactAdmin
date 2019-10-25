@@ -103,6 +103,7 @@ export default class User extends Component{
             //console.log('values:',values)
             if(!err){
                 const {userName,phone,email,userRoles} = values
+                console.log(this.user)
                 const {userID} = this.user
                 let result
                 if(userID){//如果有user,代表是更新, 否则是添加
