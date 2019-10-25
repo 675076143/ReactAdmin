@@ -34,7 +34,8 @@ const menuConfig = [
     {
         key:'/home',
         icon:'home',
-        title:'首页'
+        title:'首页',
+        isPublic:true
     },
     {
         key:'/user',
