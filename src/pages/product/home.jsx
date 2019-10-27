@@ -66,6 +66,7 @@ export default class ProductHome extends Component{
 
     //获取商品
     getProducts = async (pageNum) =>{
+        this.pageNum = pageNum
         this.setState({loading:true})//显示loading
         const {keyType,keyword} = this.state
         let result
@@ -141,7 +142,8 @@ export default class ProductHome extends Component{
                         defaultPageSize:PAGE_SIZE,
                         showQuickJumper:true,
                         total:totalNum,
-                        onChange:this.getProducts
+                        onChange:this.getProducts,
+                        current: this.pageNum
                     }} />;
             </Card>
         )

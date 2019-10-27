@@ -18,10 +18,9 @@ export class LeftNav extends Component{
      * 判断当前登录用户是否有权限
      */
     permission = (item)=>{
-        const {key,isPublic} = item
+        const {isPublic} = item
         const user = memoryUtils.user
         const {userName,permissionName} = user
-        //console.log("menus: ",user)
         /**
          * 1.当前用户是admin
          * 2.当前item是公开的
@@ -79,7 +78,7 @@ export class LeftNav extends Component{
                 }
 
             }
-
+            else return false
         })
     }
 
