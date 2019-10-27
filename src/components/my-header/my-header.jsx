@@ -4,10 +4,10 @@ import './my-header.css'
 import memoryUtils from "../../utils/memoryUtils";
 import {reqWeather} from "../../api";
 import {formateDate} from "../../utils/dateUtils"
-import menuConfig from "../../config/menuConfig";
 import { Modal } from 'antd';
 import storageUtils from "../../utils/storageUtils";
 import LinkButton from "../link-button";
+import {connect} from "react-redux";
 const { confirm } = Modal;
 
 
@@ -34,23 +34,7 @@ export class MyHeader extends Component{
         const weather = weatherData.HeWeather6[0].now.cond_txt
         this.setState({weather})
     }
-    //根据当前路径，取得当前Title
-    getTitle = ()=>{
-        let title = ''
-        const pathname = this.props.location.pathname
-        menuConfig.forEach(item=>{
-            if(item.key===pathname){
-                title = item.title
-            }else if(item.children){
-                item.children.forEach(item=>{
-                    if(item.key===pathname){
-                        title = item.title
-                    }
-                })
-            }
-        })
-        return title
-    }
+
 
     //点击退出登录
     logout = ()=>{
@@ -84,7 +68,6 @@ export class MyHeader extends Component{
     }
 
     render() {
-        console.log(this.getTitle())
         const {currentTime} = this.state
         return(
             <div className='my-header'>
@@ -95,7 +78,7 @@ export class MyHeader extends Component{
                 <hr/>
                 <div className='my-header-bottom'>
                     <div className='my-header-bottom-left'>
-                        <h1>{this.getTitle()}</h1>
+                        <h1>{this.props.headTitle}</h1>
                     </div>
                     <div className='my-header-bottom-right'>
                         <span>{currentTime}</span>
@@ -107,4 +90,7 @@ export class MyHeader extends Component{
     }
 }
 
-export default withRouter(MyHeader)
+export default connect(
+    state=>({headTitle:state.headTitle}),
+    {}
+)(withRouter(MyHeader))

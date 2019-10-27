@@ -5,6 +5,8 @@ import logo from "../../assets/img/logo.jpg"
 import { Menu, Icon } from 'antd';
 import menuConfig from "../../config/menuConfig";
 import memoryUtils from "../../utils/memoryUtils";
+import {connect} from "react-redux";
+import {setHeadTitle} from "../../redux/actions";
 
 const { SubMenu } = Menu;
 /*
@@ -41,13 +43,19 @@ export class LeftNav extends Component{
     * 使用map动态生成菜单
     * */
     generateMenuByMenuConfig = (menuConfig)=>{
+        //得到当前请求的路由路径
+        const path = this.props.location.pathname
         return menuConfig.map(item=>{
             //如果当前用户有权限，才显示对应的菜单栏
             if(this.permission(item)){
+                //判断item中是否是当前选中的item
+                if(item.key===path||path.indexOf(item.key)===0){
+                    this.props.setHeadTitle(item.title)
+                }
                 if(!item.children) {
                     return(
                         <Menu.Item key={item.key}>
-                            <Link to={item.key}>
+                            <Link to={item.key} onClick={()=>this.props.setHeadTitle(item.title)}>
                                 <Icon type={item.icon} />
                                 <span>{item.title}</span>
                             </Link>
@@ -56,8 +64,7 @@ export class LeftNav extends Component{
                 }else {
                     //自动展开被访问的SubMenu
                     //获取到与路径相同的item.key
-                    const selectedKey = this.props.location.pathname
-                    const selectedItem = item.children.find(item => item.key===selectedKey)
+                    const selectedItem = item.children.find(item => path.indexOf(item.key)===0)
                     if(selectedItem){
                         this.openKeys = item.key
                     }
@@ -92,9 +99,11 @@ export class LeftNav extends Component{
     }
 
     render() {
-        const selectedKey = this.props.location.pathname
+        let selectedKey = this.props.location.pathname
         const openKeys = this.openKeys
-        console.log(selectedKey)
+        if(selectedKey.indexOf('/product')===0){//请求的是商品的子路由组件
+            selectedKey='/product'
+        }
         return(
             <div className='left-nav'>
                 <Link to='/admin' className='left-nav-header'>
@@ -126,4 +135,7 @@ export class LeftNav extends Component{
 *   2.location
 *   3.match
 * */
-export default withRouter(LeftNav)
+export default connect (
+    state=>({}),
+    {setHeadTitle}
+)(withRouter(LeftNav))

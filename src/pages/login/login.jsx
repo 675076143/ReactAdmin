@@ -7,6 +7,7 @@ import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
 import {Redirect} from "react-router-dom";
 import LinkButton from "../../components/link-button";
+import {connect} from "react-redux";
 
 /*
 * 登录的路由组件
@@ -28,7 +29,7 @@ class Login extends Component{
                 const result = await reqLogin(username,password)
                 //console.log('请求成功',response.data)
                 if(result.code === "200"){//登陆成功
-                    message.success(result.msg)
+                    message.success(result.message)
                     //内存中保存User
                     memoryUtils.user = result.data;
                     //localstorage中保存User
@@ -37,9 +38,9 @@ class Login extends Component{
                     //跳转到后台管理页面
                     //由于不需要回退到登录界面，所以用replace
                     //如果需要则应用push
-                    this.props.history.replace('/admin')
+                    this.props.history.replace('/home')
                 }else {//登录失败
-                    message.error(result.msg)
+                    message.error(result.message)
                 }
 
             }else {
@@ -155,4 +156,7 @@ class Login extends Component{
 *   3).作用：扩展组件的功能
 * */
 const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(Login);
-export default WrappedNormalLoginForm
+export default connect(
+    state =>({user: state.user}),
+    {Login}
+)(WrappedNormalLoginForm)
