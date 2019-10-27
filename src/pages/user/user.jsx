@@ -5,7 +5,6 @@ import {
     reqDeleteUser,
     reqUpdateUser,
     reqUpdateUserInRoleName,
-    reqUpdateUserRole,
     reqUsers
 } from "../../api";
 import {formateDate} from "../../utils/dateUtils";

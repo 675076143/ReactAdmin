@@ -4,8 +4,6 @@ import logo from './images/logo.jpg'
 import {
     Form,
     Input,
-    Tooltip,
-    Icon,
     Select,
     Row,
     Col,

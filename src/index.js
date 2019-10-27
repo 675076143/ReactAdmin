@@ -10,12 +10,17 @@ import 'antd/dist/antd.min.css'
 import 'nprogress/nprogress.css'
 import storageUtils from "./utils/storageUtils";
 import memoryUtils from "./utils/memoryUtils";
+import {Provider} from "react-redux";
+import store from "./redux/store";
 
 //从localstorage中读取user保存到内存中
 memoryUtils.user = storageUtils.getUser()
 
 //将APP组件标签渲染到index页面的div上
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render((
+    <Provider store={store}>
+        <App />
+    </Provider>), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

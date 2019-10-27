@@ -154,7 +154,10 @@ export default class Role extends Component{
                     columns={this.columns}
                     dataSource={roles}
                     onRow={this.onRow}
-                    rowSelection={{type:'radio', selectedRowKeys:[role.roleID]}}
+                    rowSelection={{
+                        type:'radio',
+                        selectedRowKeys:[role.roleID],
+                        onSelect: (role)=>{this.setState({role})}}}
                 />
                 <Modal
                     title="添加角色"
