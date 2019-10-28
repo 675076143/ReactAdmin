@@ -103,9 +103,10 @@ export default class User extends Component{
             if(!err){
                 const {userName,phone,email,userRoles} = values
                 console.log(this.user)
-                const {userID} = this.user
+
                 let result
-                if(userID){//如果有user,代表是更新, 否则是添加
+                if(this.user){//如果有user,代表是更新, 否则是添加
+                    const {userID} = this.user
                     const data = {
                         email:email,
                         phone:phone
